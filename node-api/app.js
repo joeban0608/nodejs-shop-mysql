@@ -16,11 +16,12 @@ app.use((req, res, next) => {
 
 // app.use(todoRoutes);
 
-app.listen(8000);
 sequelize
-  // .sync({ force: true })
-  .sync({ force: true })
+  // .sync({ force: true }) // {force: true} 用來查看每次 db 的動作
+  .sync()
   .then((res) => {
+    console.log('sequelize success! start server 8000')
+    app.listen(8000);
     // console.log("res", res);
   })
   .catch((err) => console.log("sequelize mySql err:", err));
