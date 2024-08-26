@@ -1,6 +1,8 @@
+"use client";
 import React from "react";
 import type { ProductInfo } from "../lib/type";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const ProductCard = ({
   id,
@@ -40,6 +42,24 @@ const ShopButtons = ({ id }: { id: string }) => {
 };
 
 const AdminButtons = ({ id }: { id: string }) => {
+  const router = useRouter();
+  const handleDelete = async () => {
+    const requestOptions = {
+      method: "DELETE",
+    };
+
+    fetch(`http://localhost:8000/products/${id}`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        alert(`${result?.message ?? "Success to delete Product!"}`);
+        router.refresh();
+      })
+      .catch((error) => {
+        alert(`error to delete: ${JSON.stringify(error.message)}`);
+        console.error(error);
+      });
+  };
   return (
     <div className="flex justify-between gap-4 mt-4">
       <Link
@@ -48,7 +68,11 @@ const AdminButtons = ({ id }: { id: string }) => {
       >
         Edit
       </Link>
-      <button className="flex-1 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+      <button
+        type="button"
+        className="flex-1 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+        onClick={handleDelete}
+      >
         Delete
       </button>
     </div>

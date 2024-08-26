@@ -1,7 +1,9 @@
 "use client";
+import { useRouter } from "next/navigation";
 import React, { FormEvent, useState } from "react";
 
 const AddProductPage = () => {
+  const router = useRouter();
   const [title, setTitle] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [price, setPrice] = useState("");
@@ -32,7 +34,10 @@ const AddProductPage = () => {
 
     fetch(url, requestOptions)
       .then((response) => response.json())
-      .then((result) => console.log(result))
+      .then((result) => {
+        alert(`${result?.message ?? "Success Created"}:\n${JSON.stringify(bodyInfo)}`);
+        router.push("/admin/product-list");
+      })
       .catch((error) => console.error("post add-product api error", error));
   };
 

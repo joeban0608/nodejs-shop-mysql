@@ -2,6 +2,28 @@ const express = require("express");
 const productRouter = express.Router();
 const Product = require("../models/product");
 
+// delete product
+productRouter.delete("/products/:id", (req, res, next) => {
+  const pid = req.params.id;
+  Product.findByPk(pid)
+    .then((product) => {
+      return product.destroy();
+    })
+    .then((result) => {
+      console.log("result", result);
+      console.log("DESTROYED PROUDCT!");
+      res.status(201).json({ message: "Success to Delete Product" });
+    })
+    .catch((err) => {
+      console.log("err to delete product!", err);
+      res.status(400).json({
+        error: "failed to delete product!",
+        reason: err?.message ?? "",
+      });
+    });
+});
+
+// update product
 productRouter.put("/products/:id", (req, res, next) => {
   const pid = req.params.id;
   const updatedTitle = req.body.title;
@@ -28,6 +50,8 @@ productRouter.put("/products/:id", (req, res, next) => {
       });
     });
 });
+
+// get product info
 productRouter.post("/products/:id", (req, res, next) => {
   const pid = req.params.id;
   Product.findByPk(pid)
@@ -42,6 +66,8 @@ productRouter.post("/products/:id", (req, res, next) => {
       });
     });
 });
+
+// get all products
 productRouter.get("/products", (req, res, next) => {
   Product.findAll()
     .then((prdoucts) => {
@@ -54,6 +80,8 @@ productRouter.get("/products", (req, res, next) => {
         .json({ error: "failed to get products!", reason: err?.message ?? "" });
     });
 });
+
+// create products
 productRouter.post("/products", (req, res, next) => {
   const title = req.body.title;
   const imageUrl = req.body.imageUrl;
