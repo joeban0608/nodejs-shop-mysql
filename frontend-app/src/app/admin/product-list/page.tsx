@@ -1,6 +1,6 @@
 import React from "react";
-import { ProductsRes } from "../lib/type";
-import ProductCard from "../components/ProductCard";
+import { ProductsRes } from "../../lib/type";
+import ProductCard from "../../components/ProductCard";
 
 const AdminProductListPage = async () => {
   const url = "http://localhost:8000/products";
