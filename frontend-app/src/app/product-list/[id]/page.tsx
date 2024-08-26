@@ -11,7 +11,6 @@ const ProductPage = async ({ params }: { params: { id: string } }) => {
   });
   const productRes = (await res.json()) as ProductInfoRes;
   const product = productRes.data;
-  console.log("product", product);
   return <ProductInfo {...product} />;
 };
 
