@@ -31,6 +31,9 @@ export default function RootLayout({
           <Link className="hover:bg-slate-600 p-4" href="/add-product">
             Add Product
           </Link>
+          <Link className="hover:bg-slate-600 p-4" href="/admin-product-list">
+            Admin Product
+          </Link>
         </header>
         {children}
       </body>
