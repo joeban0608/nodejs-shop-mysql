@@ -2,13 +2,30 @@ const express = require("express");
 const productRouter = express.Router();
 const Product = require("../models/product");
 
+productRouter.post("/products/:id", (req, res, next) => {
+  const pid = req.params.id;
+  Product.findByPk(pid)
+    .then((product) => {
+      res.json({ data: product });
+    })
+    .catch((err) => {
+      console.log("err to get product info!", err);
+      res.status(400).json({
+        error: "failed to get product info!",
+        reason: err?.message ?? "",
+      });
+    });
+});
 productRouter.get("/products", (req, res, next) => {
   Product.findAll()
     .then((prdoucts) => {
-      res.json({ products: prdoucts });
+      res.json({ data: prdoucts });
     })
     .catch((err) => {
       console.log("err to get all products", err);
+      res
+        .status(400)
+        .json({ error: "failed to get products!", reason: err?.message ?? "" });
     });
 });
 productRouter.post("/products", (req, res, next) => {

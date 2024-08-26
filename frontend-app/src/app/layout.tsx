@@ -18,11 +18,19 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} w-dvw h-dvh`}>
-        <header className="w-full p-4 bg-slate-400 flex gap-8">
-          <Link href="/">Home</Link>
-          <Link href="shop">Shop</Link>
-          <Link href="product-list">Products</Link>
-          <Link href="add-product">Add Product</Link>
+        <header className="w-full  bg-slate-500 flex gap-8">
+          <Link className="hover:bg-slate-600 p-4" href="/">
+            Home
+          </Link>
+          <Link className="hover:bg-slate-600 p-4" href="/shop">
+            Shop
+          </Link>
+          <Link className="hover:bg-slate-600 p-4" href="/product-list">
+            Products
+          </Link>
+          <Link className="hover:bg-slate-600 p-4" href="/add-product">
+            Add Product
+          </Link>
         </header>
         {children}
       </body>

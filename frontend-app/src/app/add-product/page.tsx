@@ -15,7 +15,6 @@ const AddProductPage = () => {
       return;
     }
     const url = "http://localhost:8000/products";
-    console.log("price", price);
     const bodyInfo = {
       title: title,
       imageUrl: imageUrl,

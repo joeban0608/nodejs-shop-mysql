@@ -1,9 +1,7 @@
 import React from "react";
 import ProductCard from "../components/ProductCard";
+import type { ProductsRes } from "../lib/type";
 
-export type ProductsRes = {
-  products: ProductInfo[];
-};
 const ShopPage = async () => {
   const url = "http://localhost:8000/products";
   const res = await fetch(url, {
@@ -12,7 +10,7 @@ const ShopPage = async () => {
     next: { revalidate: 0 },
   });
   const productsRes = (await res.json()) as ProductsRes;
-  const products = productsRes.products;
+  const products = productsRes.data;
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
