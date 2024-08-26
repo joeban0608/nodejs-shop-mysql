@@ -5,13 +5,12 @@ export type ProductsRes = {
   products: ProductInfo[];
 };
 const ShopPage = async () => {
-  const requestOptions = {
-    method: "GET",
-    next: { revalidate: 1000 },
-    // cache: "no-store",
-  };
   const url = "http://localhost:8000/products";
-  const res = await fetch(url, requestOptions);
+  const res = await fetch(url, {
+    // cache: "no-store",
+    method: "GET",
+    next: { revalidate: 0 },
+  });
   const productsRes = (await res.json()) as ProductsRes;
   const products = productsRes.products;
   return (
