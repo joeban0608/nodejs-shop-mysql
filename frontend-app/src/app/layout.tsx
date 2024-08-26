@@ -18,10 +18,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} w-dvw h-dvh`}>
-        <header className="w-full p-4 bg-slate-400 flex gap-4">
+        <header className="w-full p-4 bg-slate-400 flex gap-8">
           <Link href="/">Home</Link>
+          <Link href="shop">Shop</Link>
+          <Link href="product-list">Products</Link>
           <Link href="add-product">Add Product</Link>
-          <Link href="#2">2</Link>
         </header>
         {children}
       </body>

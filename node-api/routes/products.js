@@ -3,11 +3,15 @@ const productRouter = express.Router();
 const Product = require("../models/product");
 
 productRouter.get("/products", (req, res, next) => {
-  console.log("get products api");
-  res.json({ products: [] });
+  Product.findAll()
+    .then((prdoucts) => {
+      res.json({ products: prdoucts });
+    })
+    .catch((err) => {
+      console.log("err to get all products", err);
+    });
 });
 productRouter.post("/products", (req, res, next) => {
-  console.log("post products api");
   const title = req.body.title;
   const imageUrl = req.body.imageUrl;
   const price = req.body.price;
