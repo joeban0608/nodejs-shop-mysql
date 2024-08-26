@@ -2,11 +2,11 @@ import React from "react";
 import { ProductsRes } from "../lib/type";
 import ProductCard from "../components/ProductCard";
 
-const AdminPage = async () => {
+const AdminProductListPage = async () => {
   const url = "http://localhost:8000/products";
   const res = await fetch(url, {
     method: "GET",
-    next: { revalidate: 0 },
+    cache: "no-store",
   });
   const productsRes = (await res.json()) as ProductsRes;
   const products = productsRes.data;
@@ -21,4 +21,4 @@ const AdminPage = async () => {
   );
 };
 
-export default AdminPage;
+export default AdminProductListPage;

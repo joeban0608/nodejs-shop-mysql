@@ -15,7 +15,7 @@ const ProductCard = ({
     <div className="p-4">
       <h2 className="text-xl font-semibold text-gray-800">{title}</h2>
       <p className="text-gray-600 mt-2">${price.toFixed(2)}</p>
-      <p className="text-gray-700 mt-4">{description}</p>
+      <p className="text-gray-700 mt-4 truncate">{description}</p>
       {page === "admin" ? <AdminButtons id={id} /> : <ShopButtons id={id} />}
     </div>
   </div>
@@ -27,7 +27,7 @@ const ShopButtons = ({ id }: { id: string }) => {
   return (
     <div className="flex justify-between gap-4 mt-4">
       <Link
-        className="flex-1 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        className="flex-1 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 text-center"
         href={`/product-list/${id}`}
       >
         Detail
@@ -43,7 +43,7 @@ const AdminButtons = ({ id }: { id: string }) => {
   return (
     <div className="flex justify-between gap-4 mt-4">
       <Link
-        className="flex-1 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        className="flex-1 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 text-center"
         href={`/admin-product-list/${id}`}
       >
         Edit

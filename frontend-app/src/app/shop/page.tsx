@@ -7,7 +7,7 @@ const ShopPage = async () => {
   const res = await fetch(url, {
     // cache: "no-store",
     method: "GET",
-    next: { revalidate: 0 },
+    cache: "no-store",
   });
   const productsRes = (await res.json()) as ProductsRes;
   const products = productsRes.data;

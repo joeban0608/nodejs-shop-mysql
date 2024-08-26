@@ -7,7 +7,7 @@ const ProductPage = async ({ params }: { params: { id: string } }) => {
   const url = `http://localhost:8000/products/${pid}`;
   const res = await fetch(url, {
     method: "POST",
-    next: { revalidate: 0 },
+    cache: "no-store",
   });
   const productRes = (await res.json()) as ProductInfoRes;
   const product = productRes.data;
