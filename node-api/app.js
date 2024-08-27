@@ -2,6 +2,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const sequelize = require("./util/database");
 const productRoutes = require("./routes/products");
+const Product = require("./models/product");
+const User = require("./models/user");
 
 const app = express();
 
@@ -22,9 +24,17 @@ app.use((req, res, next) => {
 
 app.use(productRoutes);
 
+/* 
+  一個 User 有多個 Product
+  onDelete: "CASECADE" 為當 User 刪除，及刪除 product
+*/
+
+Product.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
+User.hasMany(Product);
+
 sequelize
-  // .sync({ force: true }) // {force: true} 用來查看每次 db 的動作
-  .sync()
+  .sync({ force: true }) // {force: true} 用來強制刪除表單，並重新建立表單
+  // .sync()
   .then((res) => {
     console.log("sequelize success! start server 8000");
     app.listen(8000);
