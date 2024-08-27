@@ -10,7 +10,7 @@ productRouter.delete("/products/:id", (req, res, next) => {
       return product.destroy();
     })
     .then((result) => {
-      console.log("result", result);
+      // console.log("result", result);
       console.log("DESTROYED PROUDCT!");
       res.status(201).json({ message: "Success to Delete Product" });
     })
@@ -83,7 +83,7 @@ productRouter.get("/products", (req, res, next) => {
 
 // create products
 productRouter.post("/products", (req, res, next) => {
-  console.log("req.user", req.user);
+  // console.log("req.user", req.user);
   const title = req.body.title;
   const imageUrl = req.body.imageUrl;
   const price = req.body.price;
@@ -100,15 +100,21 @@ productRouter.post("/products", (req, res, next) => {
     description: description,
   };
 
+  /* 
+    req.user 從 app.js 新增過來的，
+    透過 sequlize 的機制，當使用 User.hasMany(Product); ... method 會自動建立 createProduct
+    ref: https://sequelize.org/docs/v6/core-concepts/assocs/#special-methodsmixins-added-to-instances
+  */
   // Product.create(productInfo)
   req.user
     .createProduct(productInfo)
     .then((result) => {
-      console.log(result);
+      // console.log(result);
+      alert('Prdouct created!')
       // respone to frontend
       res
         .status(201)
-        .json({ message: "prdouct created!", product: productInfo });
+        .json({ message: "Prdouct Created!", product: productInfo });
     })
     .catch((err) => {
       console.log("product create err", err);

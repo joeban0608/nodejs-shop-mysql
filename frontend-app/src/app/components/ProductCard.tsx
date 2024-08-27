@@ -51,7 +51,7 @@ const AdminButtons = ({ id }: { id: string }) => {
     fetch(`http://localhost:8000/products/${id}`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
+        // console.log(result);
         alert(`${result?.message ?? "Success to delete Product!"}`);
         router.refresh();
       })
