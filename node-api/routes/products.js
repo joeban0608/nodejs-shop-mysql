@@ -51,12 +51,21 @@ productRouter.put("/products/:id", (req, res, next) => {
     });
 });
 
-// get product info
+/* 
+  get product info
+  req.user.getProducts() => products[0]
+  模擬只獲取用戶的 product 資訊
+*/
 productRouter.post("/products/:id", (req, res, next) => {
   const pid = req.params.id;
-  Product.findByPk(pid)
-    .then((product) => {
-      res.json({ data: product });
+  // Product.findByPk(pid)
+  req.user
+    .getProducts({ where: { id: pid } })
+    .then((products) => {
+      if (!products?.length) {
+        throw new Error("failed to get product");
+      }
+      res.json({ data: products[0] });
     })
     .catch((err) => {
       console.log("err to get product info!", err);
@@ -67,9 +76,15 @@ productRouter.post("/products/:id", (req, res, next) => {
     });
 });
 
-// get all products
+/* 
+  get all products
+  req.user.getProducts()
+  模擬只獲取用戶的 products 資訊
+*/
 productRouter.get("/products", (req, res, next) => {
-  Product.findAll()
+  // Product.findAll()
+  req.user
+    .getProducts()
     .then((prdoucts) => {
       res.json({ data: prdoucts });
     })
@@ -110,7 +125,7 @@ productRouter.post("/products", (req, res, next) => {
     .createProduct(productInfo)
     .then((result) => {
       // console.log(result);
-      alert('Prdouct created!')
+      alert("Prdouct created!");
       // respone to frontend
       res
         .status(201)
