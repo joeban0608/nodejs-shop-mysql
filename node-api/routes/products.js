@@ -83,6 +83,7 @@ productRouter.get("/products", (req, res, next) => {
 
 // create products
 productRouter.post("/products", (req, res, next) => {
+  console.log("req.user", req.user);
   const title = req.body.title;
   const imageUrl = req.body.imageUrl;
   const price = req.body.price;
@@ -98,7 +99,10 @@ productRouter.post("/products", (req, res, next) => {
     price: price,
     description: description,
   };
-  Product.create(productInfo)
+
+  // Product.create(productInfo)
+  req.user
+    .createProduct(productInfo)
     .then((result) => {
       console.log(result);
       // respone to frontend
