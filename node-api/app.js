@@ -9,9 +9,20 @@ const app = express();
 
 app.use(bodyParser.json());
 
+// app.use((req, res, next) => {
+//   console.log("Some middleware!");
+//   next();
+// });
 app.use((req, res, next) => {
-  console.log("Some middleware!");
-  next();
+  User.findByPk(1)
+    .then((user) => {
+      // console.log("user in middleware", user);
+      req.user = user;
+      next();
+    })
+    .catch((err) => {
+      console.log("fetch user err:", err);
+    });
 });
 
 // handle cors
@@ -33,9 +44,19 @@ Product.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
 User.hasMany(Product);
 
 sequelize
-  .sync({ force: true }) // {force: true} 用來強制刪除表單，並重新建立表單
-  // .sync()
-  .then((res) => {
+  // .sync({ force: true }) // {force: true} 用來強制刪除表單，並重新建立表單
+  .sync()
+  .then(() => {
+    return User.findByPk(1);
+  })
+  .then((user) => {
+    if (!user) {
+      return User.create({ name: "Joe", email: "joe@joe.com" });
+    }
+    return user;
+  })
+  .then((user) => {
+    // console.log("user", user);
     console.log("sequelize success! start server 8000");
     app.listen(8000);
     // console.log("res", res);
