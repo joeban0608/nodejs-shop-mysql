@@ -3,8 +3,8 @@ import { Cog } from "lucide-react";
 import { ProductInfoRes } from "@/app/lib/type";
 import React, { FormEvent, useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-
 import useSWR from "swr";
+import Loading from "@/app/components/Loading";
 
 const AdminEditProductPage = () => {
   const router = useRouter();
@@ -84,14 +84,7 @@ const AdminEditProductPage = () => {
   if (isLoading) {
     return (
       <div className="w-full h-[calc(100%-56px)] flex items-center justify-center">
-        <button
-          type="button"
-          className="flex items-center justify-center gap-2 "
-          disabled
-        >
-          <Cog className="h-6 w-6 animate-spin" />
-          <span className="text-lg">Loading...</span>
-        </button>
+        <Loading />
       </div>
     );
   }

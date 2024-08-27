@@ -1,23 +1,29 @@
+"use client";
 import React from "react";
 import ProductCard from "../components/ProductCard";
-import type { ProductsRes } from "../lib/type";
+import { getPrducts } from "../lib/api";
+import useSWR from "swr";
+import Loading from "../components/Loading";
 
-const ProdcutListPage = async () => {
-  const url = "http://localhost:8000/products";
-  const res = await fetch(url, {
-    // cache: "no-store",
-    method: "GET",
-    cache: "no-store",
-  });
-  const productsRes = (await res.json()) as ProductsRes;
-  const products = productsRes.data;
+const ProdcutListPage = () => {
+  const {
+    data: products,
+    error,
+    isLoading,
+  } = useSWR("api/products", getPrducts);
+
+  if (isLoading) {
+    return (
+      <div className="w-full h-[calc(100%-56px)] flex items-center justify-center">
+        <Loading />
+      </div>
+    );
+  }
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {products?.map((product) => {
-          return (
-            <ProductCard key={product.title} {...product} page="prodcut-list" />
-          );
+          return <ProductCard key={product.title} {...product} page="product-list" />;
         })}
       </div>
     </div>
