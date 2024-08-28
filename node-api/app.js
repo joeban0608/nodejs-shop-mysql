@@ -6,7 +6,7 @@ const Product = require("./models/product");
 const User = require("./models/user");
 const Cart = require("./models/cart");
 const CartItem = require("./models/cartItem");
-const shopRoutes = require("./routes/shop");
+const cartRoutes = require("./routes/cart");
 const app = express();
 
 app.use(bodyParser.json());
@@ -36,7 +36,7 @@ app.use((req, res, next) => {
 });
 
 app.use(productRoutes);
-app.use(shopRoutes);
+app.use(cartRoutes);
 
 /* 
   onDelete: "CASECADE" 為當 User 刪除，及刪除 product

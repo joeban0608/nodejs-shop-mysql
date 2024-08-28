@@ -1,7 +1,7 @@
 const express = require("express");
-const shopRoutes = express.Router();
+const cartRoutes = express.Router();
 
-shopRoutes.get("/cart", (req, res, next) => {
+cartRoutes.get("/cart", (req, res, next) => {
   // console.log(req.user);
   req.user
     .getCart()
@@ -21,4 +21,4 @@ shopRoutes.get("/cart", (req, res, next) => {
   // res.json({ message: "cart here" });
 });
 
-module.exports = shopRoutes;
+module.exports = cartRoutes;
