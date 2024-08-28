@@ -6,6 +6,8 @@ const Product = require("./models/product");
 const User = require("./models/user");
 const Cart = require("./models/cart");
 const CartItem = require("./models/cartItem");
+const Order = require("./models/order");
+const OtherItem = require("./models/orderItem");
 const cartRoutes = require("./routes/cart");
 const app = express();
 
@@ -47,6 +49,10 @@ User.hasOne(Cart);
 Cart.belongsTo(User);
 Cart.belongsToMany(Product, { through: CartItem });
 Product.belongsToMany(Cart, { through: CartItem });
+Order.belongsTo(User);
+User.hasMany(Order);
+Order.belongsToMany(Product, { through: CartItem });
+Product.belongsToMany(Order, { through: CartItem });
 
 sequelize
   // .sync({ force: true }) // {force: true} 用來強制刪除表單，並重新建立表單
