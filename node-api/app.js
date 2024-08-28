@@ -6,6 +6,7 @@ const Product = require("./models/product");
 const User = require("./models/user");
 const Cart = require("./models/cart");
 const CartItem = require("./models/cartItem");
+const shopRoutes = require("./routes/shop");
 const app = express();
 
 app.use(bodyParser.json());
@@ -35,6 +36,7 @@ app.use((req, res, next) => {
 });
 
 app.use(productRoutes);
+app.use(shopRoutes);
 
 /* 
   onDelete: "CASECADE" 為當 User 刪除，及刪除 product
@@ -60,7 +62,10 @@ sequelize
     return user;
   })
   .then((user) => {
-    // console.log("user", user);
+    return user.createCart();
+  })
+  .then((cart) => {
+    // console.log("cart", cart);
     console.log("sequelize success! start server 8000");
     app.listen(8000);
     // console.log("res", res);
