@@ -28,6 +28,5 @@ export const postCart = async (pid: string) => {
     message?: string;
   };
 
-  // console.log("post cartRes", cartRes);
   return cartRes;
 };

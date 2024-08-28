@@ -10,7 +10,6 @@ productRouter.delete("/products/:id", (req, res, next) => {
       return product.destroy();
     })
     .then((result) => {
-      // console.log("result", result);
       console.log("DESTROYED PROUDCT!");
       res.status(201).json({ message: "Success to Delete Product" });
     })
@@ -98,7 +97,6 @@ productRouter.get("/products", (req, res, next) => {
 
 // create products
 productRouter.post("/products", (req, res, next) => {
-  // console.log("req.user", req.user);
   const title = req.body.title;
   const imageUrl = req.body.imageUrl;
   const price = req.body.price;
@@ -124,8 +122,6 @@ productRouter.post("/products", (req, res, next) => {
   req.user
     .createProduct(productInfo)
     .then((result) => {
-      // console.log(result);
-      // respone to frontend
       res
         .status(201)
         .json({ message: "Prdouct Created!", product: productInfo });

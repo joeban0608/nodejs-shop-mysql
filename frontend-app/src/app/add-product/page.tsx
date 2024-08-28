@@ -13,8 +13,7 @@ const AddProductPage = () => {
     e.preventDefault();
     // Handle form submission logic here
     if (!title || !imageUrl || !price || !description) {
-      alert('some form value not found')
-      console.log("some value not found");
+      alert("some form value not found");
       return;
     }
     const url = "http://localhost:8000/products";
@@ -36,7 +35,14 @@ const AddProductPage = () => {
     fetch(url, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        alert(`${result?.message ?? "Success Created"}:\n${JSON.stringify(bodyInfo)}`);
+        if (result?.error) {
+          throw new Error(result.error);
+        }
+        alert(
+          `${result?.message ?? "Success Created"}:\n${JSON.stringify(
+            bodyInfo
+          )}`
+        );
         router.push("/admin/product-list");
       })
       .catch((error) => console.error("post add-product api error", error));

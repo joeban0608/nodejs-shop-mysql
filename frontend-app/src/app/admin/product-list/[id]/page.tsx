@@ -62,7 +62,6 @@ const AdminEditProductPage = () => {
       .then((result) => {
         alert("Updated Success!");
         router.push(`/admin/product-list`);
-        // console.log(result);
       })
       .catch((error) => console.error("post add-product api error", error));
   };

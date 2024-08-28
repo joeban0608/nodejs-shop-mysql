@@ -47,7 +47,6 @@ const ShopButtons = ({ id }: { id: string }) => {
       }
       alert("Add to card Success");
       router.push("/cart");
-      // console.log("addToCardRes", addToCardRes);
     } catch (err) {
       alert(`Failed to add to card: ${err}`);
       console.log("add to card err", err);
@@ -81,12 +80,11 @@ const AdminButtons = ({ id }: { id: string }) => {
     fetch(`http://localhost:8000/products/${id}`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        // console.log(result);
         alert(`${result?.message ?? "Success to delete Product!"}`);
         router.refresh();
       })
       .catch((error) => {
-        alert(`error to delete: ${JSON.stringify(error.message)}`);
+        alert(`Error to delete Product: ${JSON.stringify(error.message)}`);
         console.error(error);
       });
   };

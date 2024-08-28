@@ -18,7 +18,6 @@ app.use(bodyParser.json());
 app.use((req, res, next) => {
   User.findByPk(1)
     .then((user) => {
-      // console.log("user in middleware", user);
       req.user = user;
       next();
     })
@@ -65,9 +64,7 @@ sequelize
     return user.createCart();
   })
   .then((cart) => {
-    // console.log("cart", cart);
     console.log("sequelize success! start server 8000");
     app.listen(8000);
-    // console.log("res", res);
   })
   .catch((err) => console.log("sequelize mySql err:", err));

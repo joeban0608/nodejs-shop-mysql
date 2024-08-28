@@ -2,8 +2,8 @@ const express = require("express");
 const Product = require("../models/product");
 const cartRoutes = express.Router();
 
+// get cart data
 cartRoutes.get("/cart", (req, res, next) => {
-  // console.log(req.user);
   req.user
     .getCart()
     .then((cart) => {
@@ -19,12 +19,11 @@ cartRoutes.get("/cart", (req, res, next) => {
     .catch((err) => {
       console.log("get cart err", err);
     });
-  // res.json({ message: "cart here" });
 });
+
+// add product to cart
 cartRoutes.post("/cart/:id", (req, res, next) => {
   const pid = req.params.id;
-  // console.log("pid", pid);
-  // console.log(req.user);
   let newQuantity = 1;
   let fetchedCart;
   req.user
@@ -52,11 +51,32 @@ cartRoutes.post("/cart/:id", (req, res, next) => {
       });
     })
     .then(() => {
-      res.json({ message: "Success to add product to cart." });
+      res.json({ message: "Success to add cartItem to cart." });
     })
     .catch((err) => {
-      res.json({ error: "failed to add product to cart!" });
-      console.log("create cart product err", err);
+      console.log("add cartItem to cart err", err);
+      res.json({ error: "failed to add cartItem to cart!" });
+    });
+});
+
+// delete cartItem
+cartRoutes.delete("/cart/:id", (req, res, next) => {
+  const pid = req.params.id;
+  req.user
+    .getCart()
+    .then((cart) => {
+      return cart.getProducts({ where: { id: pid } });
+    })
+    .then((products) => {
+      const product = products[0];
+      return product.cartItem.destroy();
+    })
+    .then((result) => {
+      res.json({ message: "Success to delete cartItem" });
+    })
+    .catch((err) => {
+      console.log("Deleted cartItem err:", err);
+      res.json({ error: "failed to delete cartItem" });
     });
 });
 

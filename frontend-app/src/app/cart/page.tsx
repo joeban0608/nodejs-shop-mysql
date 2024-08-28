@@ -1,18 +1,38 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import { getCart } from "../lib/api";
 import useSWR from "swr";
 import Loading from "../components/Loading";
 
 const CartPage = () => {
-  const { data: cartData, error, isLoading } = useSWR("api/cart", getCart);
-  useEffect(() => {
-    // console.log("cartData", cartData);
-  }, [cartData]);
-  const handleDelete = (id: string) => {
-    console.log(`Delete item with id: ${id}`);
-    // Here you can add your logic to delete the item
+  const {
+    data: cartData,
+    error,
+    isLoading,
+    mutate,
+  } = useSWR("api/cart", getCart);
+
+  const handleDelete = async (id: string) => {
+    const requestOptions = {
+      method: "DELETE",
+    };
+
+    await fetch(`http://localhost:8000/cart/${id}`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        if (result?.error) {
+          throw new Error(result.error);
+        }
+        alert(`${result?.message ?? "Success to delete CartItem!"}`);
+      })
+      .catch((error) => {
+        alert(`Error to delete cartItem: ${JSON.stringify(error.message)}`);
+        console.error(error);
+      });
+
+    await mutate();
   };
+  
   if (isLoading) {
     return (
       <div className="w-full h-[calc(100%-56px)] flex items-center justify-center">
