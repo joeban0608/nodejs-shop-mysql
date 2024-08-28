@@ -25,11 +25,11 @@ export default function RootLayout({
           <Link className="hover:bg-slate-600 p-4" href="/shop">
             Shop
           </Link>
-          <Link className="hover:bg-slate-600 p-4" href="/cart">
-            Cart
-          </Link>
           <Link className="hover:bg-slate-600 p-4" href="/product-list">
             Products
+          </Link>
+          <Link className="hover:bg-slate-600 p-4" href="/cart">
+            Cart
           </Link>
           <Link className="hover:bg-slate-600 p-4" href="/add-product">
             Add Product

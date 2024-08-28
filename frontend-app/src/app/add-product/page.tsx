@@ -13,6 +13,7 @@ const AddProductPage = () => {
     e.preventDefault();
     // Handle form submission logic here
     if (!title || !imageUrl || !price || !description) {
+      alert('some form value not found')
       console.log("some value not found");
       return;
     }

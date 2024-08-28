@@ -26,6 +26,33 @@ const ProductCard = ({
 export default ProductCard;
 
 const ShopButtons = ({ id }: { id: string }) => {
+  const router = useRouter();
+
+  const handleAddToCard = async () => {
+    try {
+      const requestOptions = {
+        method: "POST",
+      };
+
+      const res = await fetch(
+        `http://localhost:8000/cart/${id}`,
+        requestOptions
+      );
+      if (!res.ok) {
+        throw new Error("Fail to add to card.");
+      }
+      const addToCardRes = await res.json();
+      if (addToCardRes.error) {
+        throw new Error("Fail to add to card.");
+      }
+      alert("Add to card Success");
+      router.push("/cart");
+      // console.log("addToCardRes", addToCardRes);
+    } catch (err) {
+      alert(`Failed to add to card: ${err}`);
+      console.log("add to card err", err);
+    }
+  };
   return (
     <div className="flex justify-between gap-4 mt-4">
       <Link
@@ -34,7 +61,10 @@ const ShopButtons = ({ id }: { id: string }) => {
       >
         Detail
       </Link>
-      <button className="flex-1 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+      <button
+        className="flex-1 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+        onClick={handleAddToCard}
+      >
         Add to Cart
       </button>
     </div>

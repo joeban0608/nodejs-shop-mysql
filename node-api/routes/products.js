@@ -125,7 +125,6 @@ productRouter.post("/products", (req, res, next) => {
     .createProduct(productInfo)
     .then((result) => {
       // console.log(result);
-      alert("Prdouct created!");
       // respone to frontend
       res
         .status(201)
