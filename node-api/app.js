@@ -67,7 +67,12 @@ sequelize
     return user;
   })
   .then((user) => {
-    return user.createCart();
+    return user.getCart().then((cart) => {
+      if (!cart) {
+        user.createCart();
+      }
+      return cart;
+    });
   })
   .then((cart) => {
     console.log("sequelize success! start server 8000");
