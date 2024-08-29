@@ -45,7 +45,10 @@ const AddProductPage = () => {
         );
         router.push("/admin/product-list");
       })
-      .catch((error) => console.error("post add-product api error", error));
+      .catch((error) => {
+        console.error(error);
+        alert(`Create Product error: ${error}`);
+      });
   };
 
   return (

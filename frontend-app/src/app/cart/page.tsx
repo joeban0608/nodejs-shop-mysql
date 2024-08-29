@@ -25,9 +25,9 @@ const CartPage = () => {
         }
         alert(`${result?.message ?? "Success to delete CartItem!"}`);
       })
-      .catch((error) => {
-        alert(`Error to delete cartItem: ${JSON.stringify(error.message)}`);
-        console.error(error);
+      .catch((err) => {
+        console.error(err);
+        alert(`Error to delete cartItem: ${JSON.stringify(err.message)}`);
       });
 
     await mutate();
@@ -49,6 +49,7 @@ const CartPage = () => {
       await alert("Success to create order!");
       await mutate();
     } catch (err) {
+      console.error(err);
       alert(`Create order error: ${err}`);
     }
   };

@@ -48,6 +48,7 @@ const ShopButtons = ({ id }: { id: string }) => {
       alert("Add to card Success");
       router.push("/cart");
     } catch (err) {
+      console.error(err);
       alert(`Failed to add to card: ${err}`);
     }
   };
