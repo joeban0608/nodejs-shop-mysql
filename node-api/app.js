@@ -53,7 +53,10 @@ Cart.belongsToMany(Product, { through: CartItem });
 Product.belongsToMany(Cart, { through: CartItem });
 Order.belongsTo(User);
 User.hasMany(Order);
-Order.belongsToMany(Product, { through: OrderItem });
+Order.belongsToMany(Product, {
+  through: OrderItem,
+  onDelete: "CASCADE", // This ensures order items are deleted when an order is deleted
+});
 Product.belongsToMany(Order, { through: OrderItem });
 
 sequelize

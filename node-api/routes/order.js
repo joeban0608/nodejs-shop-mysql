@@ -1,11 +1,14 @@
 const express = require("express");
 const orderRoutes = express.Router();
 
+// create order
 orderRoutes.post("/order", (req, res, next) => {
   let fetchedCartProducts;
+  let fetchedCard;
   req.user
     .getCart()
     .then((cart) => {
+      fetchedCard = cart;
       return cart.getProducts();
     })
     .then((products) => {
@@ -26,15 +29,38 @@ orderRoutes.post("/order", (req, res, next) => {
       );
     })
     .then((result) => {
-      console.log("create orther result", result);
-      res.json({ message: "Success to Create Order" });
+      // 成功後，清空購物車
+      return fetchedCard
+        .setProducts(null)
+        .then(() => {
+          // 只有在成功清空购物车后才发送成功响应
+          res.json({ message: "Success to Create Order" });
+        })
+        .catch((err) => {
+          // 如果清空购物车失败，回應錯誤信息給客戶端
+          console.error("Failed to clear cart after order creation:", err);
+          res.status(500).json({
+            error: `Failed to clear cart after order creation: ${err.message}`,
+          });
+        });
     })
     .catch((err) => {
-      console.log("create order error:", err);
-      if (err.message) {
-        res.status(400).json({ error: err.message });
-      }
-      res.status(500).json({ error: "server error" });
+      // 处理创建订单期间的错误
+      console.error("Error during order creation:", err);
+      res.status(500).json({ error: "Server error during order creation." });
+    });
+});
+
+// get orders
+orderRoutes.get("/orders", (req, res, next) => {
+  req.user
+    .getOrders({ include: ["products"] })
+    .then((orders) => {
+      res.json({ data: orders });
+    })
+    .catch((err) => {
+      console.log("get orders err", err);
+      res.status(400).json({ error: `Get orders err: ${err.message}` });
     });
 });
 

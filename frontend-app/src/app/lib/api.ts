@@ -1,4 +1,4 @@
-import { GetCartRes, ProductsRes } from "./type";
+import { GetCartRes, GetOrderRes, ProductsRes } from "./type";
 
 export const getPrducts = async () => {
   const requestOptions = {
@@ -18,15 +18,11 @@ export const getCart = async () => {
   return cartRes.data;
 };
 
-export const postCart = async (pid: string) => {
+export const getOrders = async () => {
   const requestOptions = {
-    method: "POST",
+    method: "GET",
   };
-  const res = await fetch(`http://localhost:8000/cart/${pid}`, requestOptions);
-  const cartRes = (await res.json()) as {
-    error?: string;
-    message?: string;
-  };
-
-  return cartRes;
+  const res = await fetch("http://localhost:8000/orders", requestOptions);
+  const orderRes = (await res.json()) as GetOrderRes;
+  return orderRes.data;
 };
