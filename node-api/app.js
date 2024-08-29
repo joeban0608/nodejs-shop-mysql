@@ -9,6 +9,7 @@ const CartItem = require("./models/cartItem");
 const Order = require("./models/order");
 const OrderItem = require("./models/orderItem");
 const cartRoutes = require("./routes/cart");
+const orderRoutes = require("./routes/order");
 const app = express();
 
 app.use(bodyParser.json());
@@ -38,6 +39,7 @@ app.use((req, res, next) => {
 
 app.use(productRoutes);
 app.use(cartRoutes);
+app.use(orderRoutes);
 
 /* 
   onDelete: "CASECADE" 為當 User 刪除，及刪除 product
@@ -55,8 +57,8 @@ Order.belongsToMany(Product, { through: OrderItem });
 Product.belongsToMany(Order, { through: OrderItem });
 
 sequelize
-  .sync({ force: true }) // {force: true} 用來強制刪除表單，並重新建立表單
-  // .sync()
+  // .sync({ force: true }) // {force: true} 用來強制刪除表單，並重新建立表單
+  .sync()
   .then(() => {
     return User.findByPk(1);
   })
