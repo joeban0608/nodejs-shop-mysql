@@ -13,11 +13,6 @@ const orderRoutes = require("./routes/order");
 const app = express();
 
 app.use(bodyParser.json());
-
-// app.use((req, res, next) => {
-//   console.log("Some middleware!");
-//   next();
-// });
 app.use((req, res, next) => {
   User.findByPk(1)
     .then((user) => {

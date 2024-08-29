@@ -11,9 +11,6 @@ const OrderPage = () => {
     isLoading,
     // mutate,
   } = useSWR("api/orders", getOrders);
-  useEffect(() => {
-    console.log("orders", orders);
-  }, [orders]);
 
   if (isLoading) {
     return (
