@@ -13,11 +13,16 @@ const orderRoutes = require("./routes/order");
 const app = express();
 const session = require("express-session");
 const authRoutes = require("./routes/auth");
+const SequelizeStore = require("connect-session-sequelize")(session.Store);
+
 app.use(
   session({
     secret: "my secret",
     resave: false,
     saveUninitialized: true,
+    store: new SequelizeStore({
+      db: sequelize,
+    }),
     // cookie: { secure: true },
   })
 );
