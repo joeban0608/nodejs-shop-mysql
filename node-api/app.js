@@ -11,6 +11,16 @@ const OrderItem = require("./models/orderItem");
 const cartRoutes = require("./routes/cart");
 const orderRoutes = require("./routes/order");
 const app = express();
+const session = require("express-session");
+const authRoutes = require("./routes/auth");
+app.use(
+  session({
+    secret: "my secret",
+    resave: false,
+    saveUninitialized: true,
+    // cookie: { secure: true },
+  })
+);
 
 app.use(bodyParser.json());
 app.use((req, res, next) => {
@@ -26,15 +36,17 @@ app.use((req, res, next) => {
 
 // handle cors
 app.use((req, res, next) => {
-  res.set("Access-Control-Allow-Origin", "*");
+  res.set("Access-Control-Allow-Origin", "http://localhost:3000");
   res.set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
   res.set("Access-Control-Allow-Headers", "Content-Type");
+  res.set("Access-Control-Allow-Credentials", "true"); // 允許憑證
   next();
 });
 
 app.use(productRoutes);
 app.use(cartRoutes);
 app.use(orderRoutes);
+app.use(authRoutes);
 
 /* 
   onDelete: "CASECADE" 為當 User 刪除，及刪除 product

@@ -40,6 +40,9 @@ export default function RootLayout({
           <Link className="hover:bg-slate-600 p-4" href="/admin">
             Admin Product
           </Link>
+          <Link className="hover:bg-slate-600 p-4" href="/login">
+            Login
+          </Link>
         </header>
         {children}
       </body>

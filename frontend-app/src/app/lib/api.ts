@@ -26,3 +26,44 @@ export const getOrders = async () => {
   const orderRes = (await res.json()) as GetOrderRes;
   return orderRes.data;
 };
+
+export const postLogin = async () => {
+  // auth/login
+  try {
+    const res = await fetch("http://localhost:8000/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+    if (!res.ok) {
+      throw new Error("Login res error");
+    }
+    const loginRes = (await res.json()) as { message?: string; error?: string };
+
+    return loginRes;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const getLogin = async () => {
+  try {
+    const res = await fetch("http://localhost:8000/auth/login", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+    if (!res.ok) {
+      throw new Error("Login res error");
+    }
+    const loginRes = (await res.json()) as { message?: string; error?: string };
+
+    return loginRes;
+  } catch (err) {
+    console.error(err);
+  }
+};

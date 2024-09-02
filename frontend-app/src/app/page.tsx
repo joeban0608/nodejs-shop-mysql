@@ -1,4 +1,14 @@
+"use client";
+import { useEffect } from "react";
+import { getLogin } from "./lib/api";
+
 export default function Home() {
+  const fetchLogin = async () => await getLogin();
+  useEffect(() => {
+    fetchLogin();
+  }, []);
+  // const loginres = await fetchLogin();
+  // console.log("loginres", loginres);
   return (
     <div className="w-full h-full flex flex-col gap-4">
       <h1 className="text-4xl font-bold">Home page</h1>
