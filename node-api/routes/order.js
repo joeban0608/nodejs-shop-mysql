@@ -5,6 +5,7 @@ const orderRoutes = express.Router();
 orderRoutes.post("/order", (req, res, next) => {
   let fetchedCartProducts;
   let fetchedCard;
+
   req.user
     .getCart()
     .then((cart) => {
@@ -53,6 +54,9 @@ orderRoutes.post("/order", (req, res, next) => {
 
 // get orders
 orderRoutes.get("/orders", (req, res, next) => {
+  if (!req?.user?.getOrders) {
+    res.json({ data: [] });
+  }
   req.user
     .getOrders({ include: ["products"] })
     .then((orders) => {

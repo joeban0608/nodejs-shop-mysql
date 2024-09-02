@@ -82,6 +82,9 @@ productRouter.post("/products/:id", (req, res, next) => {
 */
 productRouter.get("/products", (req, res, next) => {
   // Product.findAll()
+  if (!req?.user?.getCart) {
+    return res.json({ data: [] });
+  }
   req.user
     .getProducts()
     .then((prdoucts) => {

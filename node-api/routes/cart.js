@@ -4,20 +4,20 @@ const cartRoutes = express.Router();
 
 // get cart data
 cartRoutes.get("/cart", (req, res, next) => {
+  if (!req?.user?.getCart) {
+    return res.json({ data: [] });
+  }
   req.user
     .getCart()
     .then((cart) => {
-      return cart
-        .getProducts()
-        .then((products) => {
-          return res.json({ data: products });
-        })
-        .catch((err) => {
-          console.log("get cart products err", err);
-        });
+      return cart.getProducts();
+    })
+    .then((products) => {
+      return res.json({ data: products });
     })
     .catch((err) => {
       console.log("get cart err", err);
+      return res.json({ data: [] });
     });
 });
 
