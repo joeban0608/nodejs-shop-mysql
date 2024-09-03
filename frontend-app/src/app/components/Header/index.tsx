@@ -34,7 +34,7 @@ const Header = () => {
                 </Link>
               );
             }
-            return <></>;
+            return null;
           })}
           {isLoggined && <LogoutButton />}
         </>
