@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
-import LogoutButton from "./components/LogoutButton";
+import LogoutButton from "./components/Header/LogoutButton";
+import Header from "./components/Header";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,33 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} w-dvw h-dvh`}>
-        <header className="w-full  bg-slate-500 flex gap-8 overflow-auto text-nowrap">
-          <Link className="hover:bg-slate-600 p-4" href="/">
-            Home
-          </Link>
-          <Link className="hover:bg-slate-600 p-4" href="/shop">
-            Shop
-          </Link>
-          <Link className="hover:bg-slate-600 p-4" href="/product-list">
-            Products
-          </Link>
-          <Link className="hover:bg-slate-600 p-4" href="/cart">
-            Cart
-          </Link>
-          <Link className="hover:bg-slate-600 p-4" href="/order">
-            Orders
-          </Link>
-          <Link className="hover:bg-slate-600 p-4" href="/add-product">
-            Add Product
-          </Link>
-          <Link className="hover:bg-slate-600 p-4" href="/admin">
-            Admin Product
-          </Link>
-          <Link className="hover:bg-slate-600 p-4" href="/login">
-            Login
-          </Link>
-          <LogoutButton />
-        </header>
+        <Header />
         {children}
       </body>
     </html>

@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
-import { postLogout } from "../lib/api";
 import { useRouter } from "next/navigation";
-import useSWR, { mutate } from "swr";
+import { mutate } from "swr";
+import { postLogout } from "@/app/lib/api";
 
 const LogoutButton = () => {
   const router = useRouter();
