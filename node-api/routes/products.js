@@ -81,17 +81,9 @@ productRouter.post("/products/:id", (req, res, next) => {
 
 /* 
   get all products
-  req.user.getProducts()
-  模擬只獲取用戶的 products 資訊
 */
 productRouter.get("/products", (req, res, next) => {
-  // Product.findAll()
-  if (!req.user) {
-    res.status(400).json({ error: "User not logged in or session expired" });
-    return;
-  }
-  req.user
-    .getProducts()
+  Product.findAll()
     .then((prdoucts) => {
       res.json({ data: prdoucts });
     })

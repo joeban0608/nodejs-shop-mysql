@@ -1,5 +1,4 @@
 "use client";
-import { Cog } from "lucide-react";
 import { ProductInfoRes } from "@/app/lib/type";
 import React, { FormEvent, useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
