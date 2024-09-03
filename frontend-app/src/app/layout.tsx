@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
+import LogoutButton from "./components/LogoutButton";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,7 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} w-dvw h-dvh`}>
-        <header className="w-full  bg-slate-500 flex gap-8">
+        <header className="w-full  bg-slate-500 flex gap-8 overflow-auto text-nowrap">
           <Link className="hover:bg-slate-600 p-4" href="/">
             Home
           </Link>
@@ -43,6 +44,7 @@ export default function RootLayout({
           <Link className="hover:bg-slate-600 p-4" href="/login">
             Login
           </Link>
+          <LogoutButton />
         </header>
         {children}
       </body>

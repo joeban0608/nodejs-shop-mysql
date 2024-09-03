@@ -15,6 +15,7 @@ const session = require("express-session");
 const authRoutes = require("./routes/auth");
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
 
+app.use(bodyParser.json());
 app.use(
   session({
     secret: "my secret",
@@ -27,9 +28,8 @@ app.use(
   })
 );
 
-app.use(bodyParser.json());
 app.use((req, res, next) => {
-  User.findByPk(1)
+  User.findOne()
     .then((user) => {
       req.user = user;
       next();
@@ -75,11 +75,15 @@ sequelize
   // .sync({ force: true }) // {force: true} 用來強制刪除表單，並重新建立表單
   .sync()
   .then(() => {
-    return User.findByPk(1);
+    return User.findOne();
   })
   .then((user) => {
     if (!user) {
-      return User.create({ name: "Joe", email: "joe@joe.com" });
+      return User.create({
+        name: "Joe",
+        email: "joe@joe.com",
+        id: "2ac4eb59-089b-486a-ae2a-12158dbb05aa",
+      });
     }
     return user;
   })

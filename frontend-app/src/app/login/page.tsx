@@ -1,9 +1,14 @@
 "use client";
-import React, { FormEvent, useState } from "react";
-import { postLogin } from "../lib/api";
+import React, { FormEvent, useEffect, useState } from "react";
+import { getLogin, postLogin } from "../lib/api";
 import { useRouter } from "next/navigation";
+import useSWR from "swr";
 
 const LoginPage = () => {
+  const { data: session, error, isLoading } = useSWR("api/login", getLogin);
+  useEffect(() => {
+    console.log("session", session);
+  }, [session]);
   return (
     <div className="w-full h-[calc(100%-56px)] flex items-center justify-center">
       <LoginForm />

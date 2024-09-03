@@ -60,9 +60,35 @@ export const getLogin = async () => {
     if (!res.ok) {
       throw new Error("Login res error");
     }
-    const loginRes = (await res.json()) as { message?: string; error?: string };
+    const loginRes = (await res.json()) as {
+      session?: { user?: {}; isLoggedIn?: boolean };
+    };
+    if (!loginRes?.session?.user) return null;
+    return loginRes.session;
+  } catch (err) {
+    console.error(err);
+  }
+};
 
-    return loginRes;
+export const postLogout = async () => {
+  // auth/login
+  try {
+    const res = await fetch("http://localhost:8000/auth/logout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+    if (!res.ok) {
+      throw new Error("Login res error");
+    }
+    const logoutRes = (await res.json()) as {
+      message?: string;
+      error?: string;
+    };
+
+    return logoutRes;
   } catch (err) {
     console.error(err);
   }
