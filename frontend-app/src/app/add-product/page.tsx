@@ -24,15 +24,14 @@ const AddProductPage = () => {
       description: description,
     };
 
-    const requestOptions = {
+    fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include",
       body: JSON.stringify(bodyInfo),
-    };
-
-    fetch(url, requestOptions)
+    })
       .then((response) => response.json())
       .then((result) => {
         if (result?.error) {

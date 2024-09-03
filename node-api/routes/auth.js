@@ -11,7 +11,13 @@ authRoutes.post("/auth/login", (req, res, next) => {
     .then((user) => {
       req.session.isLoggedIn = true;
       req.session.user = user;
-      res.json({ message: "Success to login" });
+      req.session.save((err) => {
+        if (err) {
+          res.status(500).json({ error: `Error to login: ${err}` });
+          return;
+        }
+        res.json({ message: "Success to login" });
+      });
     })
     .catch((err) => console.log(err));
 });

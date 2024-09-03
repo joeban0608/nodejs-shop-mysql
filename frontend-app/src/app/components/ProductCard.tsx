@@ -30,14 +30,10 @@ const ShopButtons = ({ id }: { id: string }) => {
 
   const handleAddToCard = async () => {
     try {
-      const requestOptions = {
+      const res = await fetch(`http://localhost:8000/cart/${id}`, {
         method: "POST",
-      };
-
-      const res = await fetch(
-        `http://localhost:8000/cart/${id}`,
-        requestOptions
-      );
+        credentials: "include",
+      });
       if (!res.ok) {
         throw new Error("Fail to add to card.");
       }
@@ -73,11 +69,10 @@ const ShopButtons = ({ id }: { id: string }) => {
 const AdminButtons = ({ id }: { id: string }) => {
   const router = useRouter();
   const handleDelete = async () => {
-    const requestOptions = {
+    fetch(`http://localhost:8000/products/${id}`, {
       method: "DELETE",
-    };
-
-    fetch(`http://localhost:8000/products/${id}`, requestOptions)
+      credentials: "include",
+    })
       .then((response) => response.json())
       .then((result) => {
         alert(`${result?.message ?? "Success to delete Product!"}`);

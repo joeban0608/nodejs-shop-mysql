@@ -1,14 +1,4 @@
-"use client";
-import { useEffect } from "react";
-import { getLogin } from "./lib/api";
-import useSWR from "swr";
-
 export default function Home() {
-  const { data: session, error, isLoading } = useSWR("api/login", getLogin);
-  useEffect(() => {
-    console.log("session", session);
-  }, [session]);
-
   return (
     <div className="w-full h-full flex flex-col gap-4">
       <h1 className="text-4xl font-bold">Home page</h1>

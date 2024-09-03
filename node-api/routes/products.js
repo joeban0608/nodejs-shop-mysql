@@ -58,6 +58,10 @@ productRouter.put("/products/:id", (req, res, next) => {
 productRouter.post("/products/:id", (req, res, next) => {
   const pid = req.params.id;
   // Product.findByPk(pid)
+  if (!req.user) {
+    res.status(400).json({ error: "User not logged in or session expired" });
+    return;
+  }
   req.user
     .getProducts({ where: { id: pid } })
     .then((products) => {
@@ -82,8 +86,9 @@ productRouter.post("/products/:id", (req, res, next) => {
 */
 productRouter.get("/products", (req, res, next) => {
   // Product.findAll()
-  if (!req?.user?.getCart) {
-    return res.json({ data: [] });
+  if (!req.user) {
+    res.status(400).json({ error: "User not logged in or session expired" });
+    return;
   }
   req.user
     .getProducts()
@@ -122,6 +127,10 @@ productRouter.post("/products", (req, res, next) => {
     ref: https://sequelize.org/docs/v6/core-concepts/assocs/#special-methodsmixins-added-to-instances
   */
   // Product.create(productInfo)
+  if (!req.user) {
+    res.status(400).json({ error: "User not logged in or session expired" });
+    return;
+  }
   req.user
     .createProduct(productInfo)
     .then((result) => {

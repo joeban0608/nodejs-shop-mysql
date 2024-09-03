@@ -1,28 +1,37 @@
 import { GetCartRes, GetOrderRes, ProductsRes } from "./type";
 
 export const getPrducts = async () => {
-  const requestOptions = {
+  const res = await fetch("http://localhost:8000/products", {
     method: "GET",
-  };
-  const res = await fetch("http://localhost:8000/products", requestOptions);
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+  });
   const productsRes = (await res.json()) as ProductsRes;
   return productsRes.data;
 };
 
 export const getCart = async () => {
-  const requestOptions = {
+  const res = await fetch("http://localhost:8000/cart", {
     method: "GET",
-  };
-  const res = await fetch("http://localhost:8000/cart", requestOptions);
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+  });
   const cartRes = (await res.json()) as GetCartRes;
   return cartRes.data;
 };
 
 export const getOrders = async () => {
-  const requestOptions = {
+  const res = await fetch("http://localhost:8000/orders", {
     method: "GET",
-  };
-  const res = await fetch("http://localhost:8000/orders", requestOptions);
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+  });
   const orderRes = (await res.json()) as GetOrderRes;
   return orderRes.data;
 };

@@ -16,13 +16,13 @@ const AdminEditProductPage = () => {
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   const getProductInfo = async (id: string | string[]) => {
-    const requestOptions = {
+    const res = await fetch(`http://localhost:8000/products/${id}`, {
       method: "POST",
-    };
-    const res = await fetch(
-      `http://localhost:8000/products/${id}`,
-      requestOptions
-    );
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
     const productRes = (await res.json()) as ProductInfoRes;
     const product = productRes.data;
     return product;
@@ -49,15 +49,14 @@ const AdminEditProductPage = () => {
       description: description,
     };
 
-    const requestOptions = {
+    fetch(url, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include",
       body: JSON.stringify(bodyInfo),
-    };
-
-    fetch(url, requestOptions)
+    })
       .then((response) => response.json())
       .then((result) => {
         alert("Updated Success!");

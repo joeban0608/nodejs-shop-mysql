@@ -2,7 +2,7 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { mutate } from "swr";
-import { postLogout } from "@/app/lib/api";
+import { getLogin, postLogout } from "@/app/lib/api";
 
 const LogoutButton = () => {
   const router = useRouter();

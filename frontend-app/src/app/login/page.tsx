@@ -1,14 +1,10 @@
 "use client";
-import React, { FormEvent, useEffect, useState } from "react";
+import React, { FormEvent, useState } from "react";
 import { getLogin, postLogin } from "../lib/api";
 import { useRouter } from "next/navigation";
-import useSWR from "swr";
+import { mutate } from "swr";
 
 const LoginPage = () => {
-  const { data: session, error, isLoading } = useSWR("api/login", getLogin);
-  useEffect(() => {
-    console.log("session", session);
-  }, [session]);
   return (
     <div className="w-full h-[calc(100%-56px)] flex items-center justify-center">
       <LoginForm />
@@ -34,7 +30,8 @@ const LoginForm = () => {
       console.log("login failed");
       return;
     }
-    router.push("/");
+    await mutate("api/login", getLogin);
+    await router.push("/");
   };
 
   return (

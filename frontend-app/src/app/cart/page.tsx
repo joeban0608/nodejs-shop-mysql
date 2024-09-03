@@ -13,11 +13,10 @@ const CartPage = () => {
   } = useSWR("api/cart", getCart);
 
   const handleDelete = async (id: string) => {
-    const requestOptions = {
+    await fetch(`http://localhost:8000/cart/${id}`, {
       method: "DELETE",
-    };
-
-    await fetch(`http://localhost:8000/cart/${id}`, requestOptions)
+      credentials: "include",
+    })
       .then((response) => response.json())
       .then((result) => {
         if (result?.error) {
@@ -35,10 +34,10 @@ const CartPage = () => {
 
   const handleOrderCart = async () => {
     try {
-      const requestOptions = {
+      const res = await fetch("http://localhost:8000/order", {
         method: "POST",
-      };
-      const res = await fetch("http://localhost:8000/order", requestOptions);
+        credentials: "include",
+      });
       if (!res.ok) {
         throw new Error("Create order fetch error");
       }

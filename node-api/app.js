@@ -28,17 +28,6 @@ app.use(
   })
 );
 
-app.use((req, res, next) => {
-  User.findOne()
-    .then((user) => {
-      req.user = user;
-      next();
-    })
-    .catch((err) => {
-      console.log("fetch user err:", err);
-    });
-});
-
 // handle cors
 app.use((req, res, next) => {
   res.set("Access-Control-Allow-Origin", "http://localhost:3000");
@@ -46,6 +35,33 @@ app.use((req, res, next) => {
   res.set("Access-Control-Allow-Headers", "Content-Type");
   res.set("Access-Control-Allow-Credentials", "true"); // 允許憑證
   next();
+});
+
+// app.use((req, res, next) => {
+//   User.findOne()
+//     .then((user) => {
+//       req.user = user;
+//       next();
+//     })
+//     .catch((err) => {
+//       console.log("fetch user err:", err);
+//     });
+// });
+// app.use((req, res, next) => {
+//   console.log("Incoming request to:", req.url);
+//   next();
+// });
+app.use((req, res, next) => {
+  if (!req.session.user) {
+    return next();
+  }
+  User.findByPk(req.session.user.id)
+    .then((user) => {
+      req.user = user;
+
+      next();
+    })
+    .catch((err) => console.log(err));
 });
 
 app.use(productRoutes);

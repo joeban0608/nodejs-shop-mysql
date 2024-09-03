@@ -7,7 +7,14 @@ import { getLogin } from "@/app/lib/api";
 import Loading from "../Loading";
 
 const Header = () => {
-  const { data: session, error, isLoading } = useSWR("api/login", getLogin);
+  const {
+    data: session,
+    error,
+    isLoading,
+  } = useSWR("api/login", getLogin, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+  });
   const isLoggined = session?.isLoggedIn;
 
   return (
