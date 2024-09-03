@@ -1,10 +1,11 @@
 "use client";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
 import LogoutButton from "./LogoutButton";
 import useSWR from "swr";
 import { getLogin } from "@/app/lib/api";
 import Loading from "../Loading";
+import { usePathname, useRouter } from "next/navigation";
 
 const Header = () => {
   const {
@@ -16,6 +17,15 @@ const Header = () => {
     revalidateOnReconnect: false,
   });
   const isLoggined = session?.isLoggedIn;
+  const pathname = usePathname();
+  const router = useRouter();
+  const allowedPaths = ["/", "/shop", "/product-list", "/login"];
+
+  useEffect(() => {
+    if (!isLoggined && !allowedPaths.includes(pathname)) {
+      router.push("/login");
+    }
+  }, [pathname, isLoggined]);
 
   return (
     <header className="w-full  bg-slate-500 flex gap-8 overflow-auto text-nowrap min-h-[3.5rem]">
