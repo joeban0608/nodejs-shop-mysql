@@ -28,33 +28,43 @@ const Header = () => {
   }, [pathname, isLoggined]);
 
   return (
-    <header className="w-full  bg-slate-500 flex gap-8 overflow-auto text-nowrap min-h-[3.5rem]">
+    <header className="w-full  bg-slate-500 flex overflow-auto text-nowrap min-h-[3.5rem]">
       {isLoading ? (
         <div className="flex justify-center items-center w-full">
           <Loading />
         </div>
       ) : (
-        <>
-          {navList.map((navInfo) => {
-            if (
-              navInfo.isShowType === "both" ||
-              (navInfo.isShowType === "login" && isLoggined) ||
-              (navInfo.isShowType === "logout" && !isLoggined)
-            ) {
-              return (
-                <Link
-                  key={navInfo.name}
-                  className="hover:bg-slate-600 p-4"
-                  href={navInfo.href}
-                >
-                  {navInfo.name}
-                </Link>
-              );
-            }
-            return null;
-          })}
-          {isLoggined && <LogoutButton />}
-        </>
+        <div className="flex justify-between items-center w-full">
+          <div className="flex">
+            {navList.map((navInfo) => {
+              if (
+                navInfo.isShowType === "both" ||
+                (navInfo.isShowType === "login" && isLoggined) ||
+                (navInfo.isShowType === "logout" && !isLoggined)
+              ) {
+                return (
+                  <Link
+                    key={navInfo.name}
+                    className="hover:bg-slate-600 p-4"
+                    href={navInfo.href}
+                  >
+                    {navInfo.name}
+                  </Link>
+                );
+              }
+              return null;
+            })}
+          </div>
+
+          <div className="flex">
+            {!isLoggined && (
+              <Link className="hover:bg-slate-600 p-4" href="/login">
+                Login
+              </Link>
+            )}
+            {isLoggined && <LogoutButton />}
+          </div>
+        </div>
       )}
     </header>
   );
@@ -70,5 +80,4 @@ const navList = [
   { href: "/order", name: "Orders", isShowType: "login" },
   { href: "/add-product", name: "Add Product", isShowType: "login" },
   { href: "/admin", name: "Admin Product", isShowType: "login" },
-  { href: "/login", name: "Login", isShowType: "logout" },
 ];
