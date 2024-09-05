@@ -19,7 +19,7 @@ const Header = () => {
   const isLoggined = session?.isLoggedIn;
   const pathname = usePathname();
   const router = useRouter();
-  const allowedPaths = ["/", "/shop", "/product-list", "/login"];
+  const allowedPaths = ["/", "/shop", "/product-list", "/login", "/sign-up"];
 
   useEffect(() => {
     if (!isLoggined && !allowedPaths.includes(pathname)) {
@@ -58,9 +58,14 @@ const Header = () => {
 
           <div className="flex">
             {!isLoggined && (
-              <Link className="hover:bg-slate-600 p-4" href="/login">
-                Login
-              </Link>
+              <>
+                <Link className="hover:bg-slate-600 p-4" href="/login">
+                  Login
+                </Link>
+                <Link className="hover:bg-slate-600 p-4" href="/sign-up">
+                  Sign Up
+                </Link>
+              </>
             )}
             {isLoggined && <LogoutButton />}
           </div>
