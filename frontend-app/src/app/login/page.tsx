@@ -1,5 +1,5 @@
 "use client";
-import React, { FormEvent, useEffect, useState } from "react";
+import React, { FormEvent, useState } from "react";
 import { getLogin, postLogin } from "../lib/api";
 import { useRouter } from "next/navigation";
 import useSWR, { mutate } from "swr";
@@ -40,7 +40,7 @@ const LoginForm = () => {
     // await resetData();
   };
   const {
-    data: LoginRes,
+    // data: LoginRes,
     // error,
     isLoading,
     // mutate: PostLoginMutate,
@@ -74,12 +74,6 @@ const LoginForm = () => {
     // await mutate(["api/login", "get"], getLogin);
     // await router.push("/");
   };
-  useEffect(() => {
-    console.log("LoginRes", LoginRes);
-  }, [LoginRes]);
-  useEffect(() => {
-    console.log("error", error);
-  }, [error]);
 
   return (
     <form
