@@ -12,7 +12,7 @@ const LogoutButton = () => {
     if (res?.error || !res) {
       return;
     }
-    await mutate("api/login", null, false);
+    await mutate(["api/login", "get"], null, false);
     await router.push("/login");
   };
 

@@ -36,7 +36,18 @@ export const getOrders = async () => {
   return orderRes.data;
 };
 
-export const postLogin = async () => {
+export const postLogin = async ({
+  body,
+  onSuccess,
+  onFailed,
+}: {
+  body: {
+    email: string;
+    password: string;
+  };
+  onSuccess: () => void;
+  onFailed: (err: string) => void;
+}) => {
   // auth/login
   try {
     const res = await fetch("http://localhost:8000/auth/login", {
@@ -45,15 +56,19 @@ export const postLogin = async () => {
         "Content-Type": "application/json",
       },
       credentials: "include",
+      body: JSON.stringify(body),
     });
     if (!res.ok) {
-      throw new Error("Login res error");
+      const errorInfo = await res.json();
+      throw new Error(errorInfo.error);
     }
     const loginRes = (await res.json()) as { message?: string; error?: string };
-
+    onSuccess();
     return loginRes;
-  } catch (err) {
+  } catch (err: any) {
+    onFailed(err.message);
     console.error(err);
+    return { error: err.message };
   }
 };
 

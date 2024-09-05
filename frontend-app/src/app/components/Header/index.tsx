@@ -12,7 +12,7 @@ const Header = () => {
     data: session,
     error,
     isLoading,
-  } = useSWR("api/login", getLogin, {
+  } = useSWR(["api/login", "get"], getLogin, {
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
   });

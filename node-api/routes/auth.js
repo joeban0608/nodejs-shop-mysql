@@ -4,23 +4,47 @@ const authRoutes = express.Router();
 const bcrypt = require("bcrypt");
 const SALT_ROUNDS = 12;
 authRoutes.post("/auth/login", (req, res, next) => {
-  // req.session.isLoggedIn = true;
-  // req.session.user = user;
-  // res.json({ message: "Success to login" });
-
-  User.findByPk("2ac4eb59-089b-486a-ae2a-12158dbb05aa")
+  const email = req.body.email;
+  const password = req.body.password;
+  if (!email) {
+    res.status(400).json({ error: "Email is required" });
+    return next();
+  }
+  if (!password) {
+    res.status(401).json({ error: "Password is required." });
+    return next();
+  }
+  User.findOne({ where: { email: email } })
     .then((user) => {
-      req.session.isLoggedIn = true;
-      req.session.user = user;
-      req.session.save((err) => {
-        if (err) {
-          res.status(500).json({ error: `Error to login: ${err}` });
-          return;
+      if (!password || !user) {
+        res.status(401).json({ error: "Email or Password is Failed" });
+        return next();
+      }
+      bcrypt.compare(password, user.password).then((isMatch) => {
+        console.log("isMatch", isMatch);
+        if (!isMatch) {
+          res.status(401).json({ error: `email or password is Failed` });
+          return next();
         }
-        res.json({ message: "Success to login" });
+        // 密碼成功匹配
+        req.session.isLoggedIn = true;
+        req.session.user = user;
+        return req.session.save((err) => {
+          if (err) {
+            res
+              .status(401)
+              .json({ error: `Error to save session about login: ${err}` });
+            return next();
+          }
+          res.json({ message: "Success to login" });
+          return next();
+        });
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log("Login Server Error err", err);
+      res.status(500).json({ error: `Login Server Error: ${err}` });
+    });
 });
 
 authRoutes.get("/auth/login", (req, res, next) => {

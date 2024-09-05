@@ -1,8 +1,9 @@
 "use client";
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import { getLogin, postLogin } from "../lib/api";
 import { useRouter } from "next/navigation";
-import { mutate } from "swr";
+import useSWR, { mutate } from "swr";
+import Loading from "../components/Loading";
 
 const LoginPage = () => {
   return (
@@ -18,21 +19,67 @@ const LoginForm = () => {
   const router = useRouter();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [isSubmit, setIsSubmit] = useState(false);
+  const [error, setError] = useState("");
+  const [body, setBody] = useState<{ email: string; password: string } | null>(
+    null
+  );
+  const resetData = () => {
+    setEmail("");
+    setPassword("");
+    setIsSubmit(false);
+    setBody(null);
+  };
+  const onSuccess = async () => {
+    await resetData();
+    await mutate(["api/login", "get"], getLogin);
+    await router.push("/");
+  };
+  const onFailed = async (err: string) => {
+    await setError(err);
+    // await resetData();
+  };
+  const {
+    data: LoginRes,
+    // error,
+    isLoading,
+    // mutate: PostLoginMutate,
+  } = useSWR(
+    isSubmit && body ? ["api/login", "post", body] : null,
+    () => {
+      if (body) return postLogin({ body, onSuccess, onFailed });
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+    }
+  );
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    // 在这里处理提交逻辑，例如发送请求到服务器
-    console.log("Email:", email);
-    console.log("Password:", password);
+    await setIsSubmit(true);
+    await setError("");
 
-    const res = await postLogin();
-    if (!res?.message) {
-      console.log("login failed");
-      return;
-    }
-    await mutate("api/login", getLogin);
-    await router.push("/");
+    // 在这里处理提交逻辑，例如发送请求到服务器
+    const formBody = {
+      email: email,
+      password: password,
+    };
+    await setBody(formBody);
+    // const res = await postLogin({ body });
+    // if (!res?.message) {
+    //   console.log("login failed");
+    //   return;
+    // }
+    // await mutate(["api/login", "get"], getLogin);
+    // await router.push("/");
   };
+  useEffect(() => {
+    console.log("LoginRes", LoginRes);
+  }, [LoginRes]);
+  useEffect(() => {
+    console.log("error", error);
+  }, [error]);
 
   return (
     <form
@@ -55,7 +102,7 @@ const LoginForm = () => {
         />
       </div>
 
-      <div className="mb-6">
+      <div>
         <label htmlFor="password" className="block text-gray-700 mb-2">
           Password
         </label>
@@ -68,13 +115,25 @@ const LoginForm = () => {
           required
         />
       </div>
+      {error ? (
+        <p className="py-2 text-red-500">{error}</p>
+      ) : (
+        <p className="py-2"></p>
+      )}
 
-      <button
-        type="submit"
-        className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition-colors"
-      >
-        Login
-      </button>
+      <SubmitButton isLoading={isLoading} />
     </form>
+  );
+};
+
+const SubmitButton = ({ isLoading }: { isLoading: boolean }) => {
+  return (
+    <button
+      disabled={isLoading}
+      type="submit"
+      className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition-colors flex justify-center"
+    >
+      {isLoading ? <Loading /> : "Login"}
+    </button>
   );
 };
