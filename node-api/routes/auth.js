@@ -1,7 +1,8 @@
 const express = require("express");
 const User = require("../models/user");
 const authRoutes = express.Router();
-
+const bcrypt = require("bcrypt");
+const SALT_ROUNDS = 12;
 authRoutes.post("/auth/login", (req, res, next) => {
   // req.session.isLoggedIn = true;
   // req.session.user = user;
@@ -55,22 +56,24 @@ authRoutes.post("/auth/sign-up", (req, res, next) => {
         res.status(401).json({ error: "Duplicated email." });
         return next();
       }
-      User.create({
-        email: email,
-        password: password,
-      })
-        .then((user) => {
-          return user.createCart();
+      return bcrypt.hash(password, SALT_ROUNDS).then((hashedPassword) => {
+        User.create({
+          email: email,
+          password: hashedPassword,
         })
-        .then((cart) => {
-          console.log("Success to Created User and cart, cartInfo:", cart);
-          res.json({ message: `Success to Created User: ${email}` });
-        })
-        .catch((err) => {
-          console.log("Create User Failed err:", err);
-          res.status(400).json({ error: "Create User Failed" });
-          return next();
-        });
+          .then((user) => {
+            return user.createCart();
+          })
+          .then((cart) => {
+            console.log("Success to Created User and cart, cartInfo:", cart);
+            res.json({ message: `Success to Created User: ${email}` });
+          })
+          .catch((err) => {
+            console.log("Create User Failed err:", err);
+            res.status(400).json({ error: "Create User Failed" });
+            return next();
+          });
+      });
     })
     .catch((err) => {
       console.log("Create User when find user Error:", err);
