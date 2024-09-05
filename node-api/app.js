@@ -37,7 +37,6 @@ app.use((req, res, next) => {
   next();
 });
 
-
 app.use((req, res, next) => {
   if (!req.session.user) {
     return next();
@@ -77,7 +76,6 @@ Product.belongsToMany(Order, { through: OrderItem });
 sequelize
   // .sync({ force: true }) // {force: true} 用來強制刪除表單，並重新建立表單
   .sync()
-
   .then((result) => {
     console.log("sequelize success! start server 8000");
     app.listen(8000);
