@@ -1,15 +1,24 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { signUp } from "../actions/auth";
 import Loading from "../components/Loading";
+import { useRouter } from "next/navigation";
 const initialState = {
   message: "",
   error: null,
 };
 
 const SignUpForm = () => {
+  // 如果想要用 server redirect 不能使用 useFormState，不然在 server action 的 try catch 會跟 redirect func 打架
   const [state, formAction] = useFormState(signUp, initialState);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (state?.message) {
+      router.push("/login");
+    }
+  }, [state]);
   return (
     <form
       action={formAction}
@@ -59,20 +68,20 @@ const SignUpForm = () => {
       ) : (
         <p className="py-2">{state.message}</p>
       )}
-      <SubmitButton />
+      <SubmitButton isSuccess={!!state.message} />
     </form>
   );
 };
 
 export default SignUpForm;
 
-export function SubmitButton() {
+export function SubmitButton({ isSuccess }: { isSuccess: boolean }) {
   const { pending } = useFormStatus();
 
   return (
     <button
       type="submit"
-      disabled={pending}
+      disabled={pending || isSuccess}
       className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition-colors flex justify-center"
     >
       {pending ? <Loading /> : "Sign Up"}

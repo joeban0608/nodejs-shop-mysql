@@ -37,20 +37,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// app.use((req, res, next) => {
-//   User.findOne()
-//     .then((user) => {
-//       req.user = user;
-//       next();
-//     })
-//     .catch((err) => {
-//       console.log("fetch user err:", err);
-//     });
-// });
-// app.use((req, res, next) => {
-//   console.log("Incoming request to:", req.url);
-//   next();
-// });
+
 app.use((req, res, next) => {
   if (!req.session.user) {
     return next();
@@ -90,28 +77,8 @@ Product.belongsToMany(Order, { through: OrderItem });
 sequelize
   // .sync({ force: true }) // {force: true} 用來強制刪除表單，並重新建立表單
   .sync()
-  .then(() => {
-    return User.findOne();
-  })
-  .then((user) => {
-    if (!user) {
-      return User.create({
-        name: "Joe",
-        email: "joe@joe.com",
-        id: "2ac4eb59-089b-486a-ae2a-12158dbb05aa",
-      });
-    }
-    return user;
-  })
-  .then((user) => {
-    return user.getCart().then((cart) => {
-      if (!cart) {
-        user.createCart();
-      }
-      return cart;
-    });
-  })
-  .then((cart) => {
+
+  .then((result) => {
     console.log("sequelize success! start server 8000");
     app.listen(8000);
   })

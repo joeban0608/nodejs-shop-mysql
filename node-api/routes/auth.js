@@ -37,4 +37,45 @@ authRoutes.post("/auth/logout", (req, res, next) => {
   // res.json({ message: "Success to login" });
 });
 
+authRoutes.post("/auth/sign-up", (req, res, next) => {
+  const email = req.body.email;
+  const password = req.body.password;
+  const confirmPassword = req.body.confirmPassword;
+  if (!email) {
+    res.status(400).json({ error: "Email is required" });
+    return next();
+  }
+  if (password !== confirmPassword) {
+    res.status(401).json({ error: "Password is incorrect." });
+    return next();
+  }
+  User.findOne({ where: { email: email } })
+    .then((user) => {
+      if (user) {
+        res.status(401).json({ error: "Duplicated email." });
+        return next();
+      }
+      User.create({
+        email: email,
+        password: password,
+      })
+        .then((user) => {
+          return user.createCart();
+        })
+        .then((cart) => {
+          console.log("Success to Created User and cart, cartInfo:", cart);
+          res.json({ message: `Success to Created User: ${email}` });
+        })
+        .catch((err) => {
+          console.log("Create User Failed err:", err);
+          res.status(400).json({ error: "Create User Failed" });
+          return next();
+        });
+    })
+    .catch((err) => {
+      console.log("Create User when find user Error:", err);
+      res.status(500).json({ error: "Create User when find user Error" });
+    });
+});
+
 module.exports = authRoutes;
