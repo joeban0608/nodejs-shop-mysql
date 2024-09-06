@@ -3,6 +3,7 @@ import React from "react";
 import type { ProductInfo } from "../lib/type";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import useAuth from "../hooks/useAuth";
 
 const ProductCard = ({
   id,
@@ -26,6 +27,7 @@ const ProductCard = ({
 export default ProductCard;
 
 const ShopButtons = ({ id }: { id: string }) => {
+  const { user } = useAuth();
   const router = useRouter();
 
   const handleAddToCard = async () => {
@@ -34,15 +36,25 @@ const ShopButtons = ({ id }: { id: string }) => {
         method: "POST",
         credentials: "include",
       });
+      if (!user) {
+        await alert("please Sign up or login first!");
+        await router.push("/login");
+        return;
+      }
       if (!res.ok) {
-        throw new Error("Fail to add to card.");
+        const errorRes = await res.json();
+        throw new Error(errorRes.error);
       }
       const addToCardRes = await res.json();
-      if (addToCardRes.error) {
-        throw new Error("Fail to add to card.");
+      if (addToCardRes.message) {
+        alert(addToCardRes.message);
+        router.push("/cart");
+        return;
       }
-      alert("Add to card Success");
-      router.push("/cart");
+      if (addToCardRes.error) {
+        throw new Error(addToCardRes.error);
+      }
+      return;
     } catch (err) {
       console.error(err);
       alert(`Failed to add to card: ${err}`);
