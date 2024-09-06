@@ -1,13 +1,9 @@
 const express = require("express");
 const Product = require("../models/product");
 const cartRoutes = express.Router();
-
+const isAuthMiddleware = require("../middleware/isAuth");
 // get cart data
-cartRoutes.get("/cart", (req, res, next) => {
-  if (!req.user || !req?.session?.isLoggedIn) {
-    res.status(400).json({ error: "User not logged in or session expired" });
-    return;
-  }
+cartRoutes.get("/cart", isAuthMiddleware, (req, res, next) => {
   req.user
     .getCart()
     .then((cart) => {
@@ -23,14 +19,10 @@ cartRoutes.get("/cart", (req, res, next) => {
 });
 
 // add product to cart
-cartRoutes.post("/cart/:id", (req, res, next) => {
+cartRoutes.post("/cart/:id", isAuthMiddleware, (req, res, next) => {
   const pid = req.params.id;
   let newQuantity = 1;
   let fetchedCart;
-  if (!req.user || !req?.session?.isLoggedIn) {
-    res.status(400).json({ error: "User not logged in or session expired" });
-    return;
-  }
   req.user
     .getCart()
     .then((cart) => {
@@ -65,12 +57,8 @@ cartRoutes.post("/cart/:id", (req, res, next) => {
 });
 
 // delete cartItem
-cartRoutes.delete("/cart/:id", (req, res, next) => {
+cartRoutes.delete("/cart/:id", isAuthMiddleware, (req, res, next) => {
   const pid = req.params.id;
-  if (!req.user || !req?.session?.isLoggedIn) {
-    res.status(400).json({ error: "User not logged in or session expired" });
-    return;
-  }
   req.user
     .getCart()
     .then((cart) => {

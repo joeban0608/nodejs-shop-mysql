@@ -1,14 +1,11 @@
 const express = require("express");
 const orderRoutes = express.Router();
+const isAuthMiddleware = require("../middleware/isAuth");
 
 // create order
-orderRoutes.post("/order", (req, res, next) => {
+orderRoutes.post("/order", isAuthMiddleware, (req, res, next) => {
   let fetchedCartProducts;
   let fetchedCard;
-  if (!req.user || !req?.session?.isLoggedIn) {
-    res.status(400).json({ error: "User not logged in or session expired" });
-    return;
-  }
   req.user
     .getCart()
     .then((cart) => {
@@ -56,14 +53,7 @@ orderRoutes.post("/order", (req, res, next) => {
 });
 
 // get orders
-orderRoutes.get("/orders", (req, res, next) => {
-  if (!req.user || !req?.session?.isLoggedIn) {
-    res.status(400).json({ error: "User not logged in or session expired" });
-    return;
-  }
-  // if (!req.user || !req?.user?.getOrders) {
-  //   res.json({ data: [] });
-  // }
+orderRoutes.get("/orders", isAuthMiddleware, (req, res, next) => {
   req.user
     .getOrders({ include: ["products"] })
     .then((orders) => {

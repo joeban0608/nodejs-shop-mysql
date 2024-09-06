@@ -1,6 +1,7 @@
 const express = require("express");
 const productRouter = express.Router();
 const Product = require("../models/product");
+const isAuthMiddleware = require("../middleware/isAuth");
 
 // delete product
 productRouter.delete("/products/:id", (req, res, next) => {
@@ -55,13 +56,10 @@ productRouter.put("/products/:id", (req, res, next) => {
   req.user.getProducts() => products[0]
   模擬只獲取用戶的 product 資訊
 */
-productRouter.post("/products/:id", (req, res, next) => {
+productRouter.post("/products/:id", isAuthMiddleware, (req, res, next) => {
   const pid = req.params.id;
   // Product.findByPk(pid)
-  if (!req.user || !req?.session?.isLoggedIn) {
-    res.status(400).json({ error: "User not logged in or session expired" });
-    return next();
-  }
+
   req.user
     .getProducts({ where: { id: pid } })
     .then((products) => {
@@ -96,7 +94,7 @@ productRouter.get("/products", (req, res, next) => {
 });
 
 // create products
-productRouter.post("/products", (req, res, next) => {
+productRouter.post("/products", isAuthMiddleware, (req, res, next) => {
   const title = req.body.title;
   const imageUrl = req.body.imageUrl;
   const price = req.body.price;
@@ -119,10 +117,7 @@ productRouter.post("/products", (req, res, next) => {
     ref: https://sequelize.org/docs/v6/core-concepts/assocs/#special-methodsmixins-added-to-instances
   */
   // Product.create(productInfo)
-  if (!req.user || !req?.session?.isLoggedIn) {
-    res.status(400).json({ error: "User not logged in or session expired" });
-    return;
-  }
+
   req.user
     .createProduct(productInfo)
     .then((result) => {
