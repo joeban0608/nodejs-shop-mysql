@@ -3,6 +3,8 @@ const User = require("../models/user");
 const authRoutes = express.Router();
 const bcrypt = require("bcrypt");
 const SALT_ROUNDS = 12;
+const { check, validationResult } = require("express-validator");
+
 authRoutes.post("/auth/login", (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
@@ -62,10 +64,16 @@ authRoutes.post("/auth/logout", (req, res, next) => {
   // res.json({ message: "Success to login" });
 });
 
-authRoutes.post("/auth/sign-up", (req, res, next) => {
+authRoutes.post("/auth/sign-up", check("email").isEmail(), (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
   const confirmPassword = req.body.confirmPassword;
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    res.status(422).json({ error: errors.array()[0].msg });
+    return next();
+  }
+
   if (!email) {
     res.status(400).json({ error: "Email is required" });
     return next();
