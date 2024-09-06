@@ -9,6 +9,9 @@ export type ProductInfo = {
   userId: string;
   cartItem?: CartItem;
   orderItem?: OrderItem;
+  user?: {
+    email: string;
+  };
 };
 
 export type ProductsRes = {

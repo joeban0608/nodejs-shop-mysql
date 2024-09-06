@@ -12,6 +12,7 @@ const ProductCard = ({
   imageUrl,
   description,
   page,
+  user,
 }: ProductInfo & { page: string }) => (
   <div className="bg-white shadow-md rounded-lg overflow-hidden">
     <img className="w-full h-48 object-cover" src={imageUrl} alt={title} />
@@ -19,6 +20,12 @@ const ProductCard = ({
       <h2 className="text-xl font-semibold text-gray-800">{title}</h2>
       <p className="text-gray-600 mt-2">${price.toFixed(2)}</p>
       <p className="text-gray-700 mt-4 truncate">{description}</p>
+      {user?.email && (
+        <p className="mt-4 text-gray-700">
+          <span className="text-gray-600 font-bold">Owner:</span>{" "}
+          <span className="italic text-gray-500">{user.email}</span>
+        </p>
+      )}
       {page === "admin" ? <AdminButtons id={id} /> : <ShopButtons id={id} />}
     </div>
   </div>

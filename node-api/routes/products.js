@@ -2,6 +2,7 @@ const express = require("express");
 const productRouter = express.Router();
 const Product = require("../models/product");
 const isAuthMiddleware = require("../middleware/isAuth");
+const User = require("../models/user");
 
 // delete product
 productRouter.delete("/products/:id", (req, res, next) => {
@@ -81,7 +82,14 @@ productRouter.post("/products/:id", isAuthMiddleware, (req, res, next) => {
   get all products
 */
 productRouter.get("/products", (req, res, next) => {
-  Product.findAll()
+  Product.findAll({
+    include: [
+      {
+        model: User,
+        attributes: ["email"], // 只選擇要顯示的 email 屬性
+      },
+    ],
+  })
     .then((prdoucts) => {
       res.json({ data: prdoucts });
     })
