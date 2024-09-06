@@ -4,7 +4,7 @@ const cartRoutes = express.Router();
 
 // get cart data
 cartRoutes.get("/cart", (req, res, next) => {
-  if (!req.user) {
+  if (!req.user || !req?.session?.isLoggedIn) {
     res.status(400).json({ error: "User not logged in or session expired" });
     return;
   }
@@ -27,7 +27,7 @@ cartRoutes.post("/cart/:id", (req, res, next) => {
   const pid = req.params.id;
   let newQuantity = 1;
   let fetchedCart;
-  if (!req.user) {
+  if (!req.user || !req?.session?.isLoggedIn) {
     res.status(400).json({ error: "User not logged in or session expired" });
     return;
   }
@@ -67,7 +67,7 @@ cartRoutes.post("/cart/:id", (req, res, next) => {
 // delete cartItem
 cartRoutes.delete("/cart/:id", (req, res, next) => {
   const pid = req.params.id;
-  if (!req.user) {
+  if (!req.user || !req?.session?.isLoggedIn) {
     res.status(400).json({ error: "User not logged in or session expired" });
     return;
   }

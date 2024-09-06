@@ -5,7 +5,7 @@ const orderRoutes = express.Router();
 orderRoutes.post("/order", (req, res, next) => {
   let fetchedCartProducts;
   let fetchedCard;
-  if (!req.user) {
+  if (!req.user || !req?.session?.isLoggedIn) {
     res.status(400).json({ error: "User not logged in or session expired" });
     return;
   }
@@ -57,7 +57,7 @@ orderRoutes.post("/order", (req, res, next) => {
 
 // get orders
 orderRoutes.get("/orders", (req, res, next) => {
-  if (!req.user) {
+  if (!req.user || !req?.session?.isLoggedIn) {
     res.status(400).json({ error: "User not logged in or session expired" });
     return;
   }
