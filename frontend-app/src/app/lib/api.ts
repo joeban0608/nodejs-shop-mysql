@@ -11,6 +11,17 @@ export const getPrducts = async () => {
   const productsRes = (await res.json()) as ProductsRes;
   return productsRes.data;
 };
+export const getAdminPrducts = async () => {
+  const res = await fetch("http://localhost:8000/admin/products", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+  });
+  const productsRes = (await res.json()) as ProductsRes;
+  return productsRes.data;
+};
 
 export const getCart = async () => {
   const res = await fetch("http://localhost:8000/cart", {

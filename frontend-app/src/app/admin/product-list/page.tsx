@@ -3,14 +3,16 @@ import React from "react";
 import ProductCard from "../../components/ProductCard";
 import useSWR from "swr";
 import Loading from "@/app/components/Loading";
-import { getPrducts } from "@/app/lib/api";
+import { getAdminPrducts } from "@/app/lib/api";
+import useAuth from "@/app/hooks/useAuth";
 
 const AdminProductListPage = () => {
+  const { user } = useAuth();
   const {
     data: products,
     error,
     isLoading,
-  } = useSWR("api/products", getPrducts);
+  } = useSWR(user ? ["api/products", user] : null, getAdminPrducts);
 
   if (isLoading) {
     return (
