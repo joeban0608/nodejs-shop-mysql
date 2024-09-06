@@ -1,16 +1,18 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import { getOrders } from "../lib/api";
 import useSWR from "swr";
 import Loading from "../components/Loading";
+import useAuth from "../hooks/useAuth";
 
 const OrderPage = () => {
+  const { user } = useAuth();
   const {
     data: orders,
     error,
     isLoading,
     // mutate,
-  } = useSWR("api/orders", getOrders);
+  } = useSWR(user ? ["api/orders", user] : null, getOrders);
 
   if (isLoading) {
     return (

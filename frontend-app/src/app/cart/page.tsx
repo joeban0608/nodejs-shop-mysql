@@ -3,14 +3,16 @@ import React from "react";
 import { getCart } from "../lib/api";
 import useSWR from "swr";
 import Loading from "../components/Loading";
+import useAuth from "../hooks/useAuth";
 
 const CartPage = () => {
+  const { user } = useAuth();
   const {
     data: cartData,
     error,
     isLoading,
     mutate,
-  } = useSWR("api/cart", getCart);
+  } = useSWR(user ? ["api/cart", user] : null, getCart);
 
   const handleDelete = async (id: string) => {
     await fetch(`http://localhost:8000/cart/${id}`, {
