@@ -64,53 +64,57 @@ authRoutes.post("/auth/logout", (req, res, next) => {
   // res.json({ message: "Success to login" });
 });
 
-authRoutes.post("/auth/sign-up", check("email").isEmail(), (req, res, next) => {
-  const email = req.body.email;
-  const password = req.body.password;
-  const confirmPassword = req.body.confirmPassword;
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    res.status(422).json({ error: errors.array()[0].msg });
-    return next();
-  }
+authRoutes.post(
+  "/auth/sign-up",
+  check("email").isEmail().withMessage("Please enter a vaild email"),
+  (req, res, next) => {
+    const email = req.body.email;
+    const password = req.body.password;
+    const confirmPassword = req.body.confirmPassword;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.status(422).json({ error: errors.array()[0].msg });
+      return next();
+    }
 
-  if (!email) {
-    res.status(400).json({ error: "Email is required" });
-    return next();
-  }
-  if (password !== confirmPassword) {
-    res.status(401).json({ error: "Password is incorrect." });
-    return next();
-  }
-  User.findOne({ where: { email: email } })
-    .then((user) => {
-      if (user) {
-        res.status(401).json({ error: "Duplicated email." });
-        return next();
-      }
-      return bcrypt.hash(password, SALT_ROUNDS).then((hashedPassword) => {
-        User.create({
-          email: email,
-          password: hashedPassword,
-        })
-          .then((user) => {
-            return user.createCart();
+    if (!email) {
+      res.status(400).json({ error: "Email is required" });
+      return next();
+    }
+    if (password !== confirmPassword) {
+      res.status(401).json({ error: "Password is incorrect." });
+      return next();
+    }
+    User.findOne({ where: { email: email } })
+      .then((user) => {
+        if (user) {
+          res.status(401).json({ error: "Duplicated email." });
+          return next();
+        }
+        return bcrypt.hash(password, SALT_ROUNDS).then((hashedPassword) => {
+          User.create({
+            email: email,
+            password: hashedPassword,
           })
-          .then((cart) => {
-            console.log("Success to Created User and cart, cartInfo:", cart);
-            res.json({ message: `Success to Created User: ${email}` });
-          })
-          .catch((err) => {
-            console.log("Create User Failed err:", err);
-            res.status(400).json({ error: "Create User Failed" });
-            return next();
-          });
+            .then((user) => {
+              return user.createCart();
+            })
+            .then((cart) => {
+              console.log("Success to Created User and cart, cartInfo:", cart);
+              res.json({ message: `Success to Created User: ${email}` });
+            })
+            .catch((err) => {
+              console.log("Create User Failed err:", err);
+              res.status(400).json({ error: "Create User Failed" });
+              return next();
+            });
+        });
+      })
+      .catch((err) => {
+        console.log("Create User when find user Error:", err);
+        res.status(500).json({ error: "Create User when find user Error" });
       });
-    })
-    .catch((err) => {
-      console.log("Create User when find user Error:", err);
-      res.status(500).json({ error: "Create User when find user Error" });
-    });
-});
+  }
+);
 
 module.exports = authRoutes;
