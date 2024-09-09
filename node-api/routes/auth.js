@@ -3,7 +3,7 @@ const User = require("../models/user");
 const authRoutes = express.Router();
 const bcrypt = require("bcrypt");
 const SALT_ROUNDS = 12;
-const { check, validationResult } = require("express-validator");
+const { check, validationResult, body } = require("express-validator");
 
 authRoutes.post("/auth/login", (req, res, next) => {
   const email = req.body.email;
@@ -66,7 +66,22 @@ authRoutes.post("/auth/logout", (req, res, next) => {
 
 authRoutes.post(
   "/auth/sign-up",
-  check("email").isEmail().withMessage("Please enter a vaild email"),
+  [
+    check("email")
+      .isEmail()
+      .withMessage("Please enter a vaild email")
+      .custom((value, { req }) => {
+        if (value === "admin@test.com")
+          throw new Error("This email address is forbidden");
+        return true;
+      }),
+    body(
+      "password",
+      "Please enter a password with only numbers and text and at least 5 characters."
+    )
+      .isLength({ min: 5 })
+      .isAlphanumeric(),
+  ],
   (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
