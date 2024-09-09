@@ -81,6 +81,12 @@ authRoutes.post(
     )
       .isLength({ min: 5 })
       .isAlphanumeric(),
+    body("confirmPassword").custom((value, { req }) => {
+      if (value !== req.body.password) {
+        throw new Error("passwords did not match");
+      }
+      return true;
+    }),
   ],
   (req, res, next) => {
     const email = req.body.email;
