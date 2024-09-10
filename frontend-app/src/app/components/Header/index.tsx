@@ -22,7 +22,10 @@ const Header = () => {
   const allowedPaths = ["/", "/shop", "/product-list", "/login", "/sign-up"];
 
   useEffect(() => {
-    if (!isLoggined && !allowedPaths.includes(pathname)) {
+    if (
+      !isLoggined &&
+      !allowedPaths.some((allowedPath) => pathname.startsWith(allowedPath))
+    ) {
       router.push("/login");
     }
   }, [pathname, isLoggined]);

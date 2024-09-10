@@ -4,9 +4,9 @@ import React from "react";
 const ProductPage = async ({ params }: { params: { id: string } }) => {
   const pid = params.id;
   if (!pid) return <div>product not found</div>;
-  const url = `http://localhost:8000/products/${pid}`;
+  const url = `http://localhost:8000/product/${pid}`;
   const res = await fetch(url, {
-    method: "POST",
+    method: "GET",
     credentials: "include",
     cache: "no-store",
   });
@@ -31,7 +31,7 @@ const ProductInfo = (product: ProductInfo) => {
           <p className="text-gray-600 text-sm mb-4">{product.description}</p>
           <div className="flex items-center justify-between">
             <span className="text-xl font-semibold text-gray-800">
-              ${product.price.toFixed(2)}
+              ${product?.price?.toFixed(2)}
             </span>
             <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
               Add to Cart

@@ -100,6 +100,21 @@ productRouter.get("/products", (req, res, next) => {
         .json({ error: "failed to get products!", reason: err?.message ?? "" });
     });
 });
+productRouter.get("/product/:id", (req, res, next) => {
+  const pid = req.params.id;
+
+  Product.findAll({ where: { id: pid } })
+    .then((product) => {
+      console.log("product", product);
+      res.json({ data: product[0] });
+    })
+    .catch((err) => {
+      console.log("err to get all products", err);
+      res
+        .status(400)
+        .json({ error: "failed to get products!", reason: err?.message ?? "" });
+    });
+});
 /* 
   get admin products
 */
