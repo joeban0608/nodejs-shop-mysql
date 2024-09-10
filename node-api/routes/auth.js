@@ -73,7 +73,8 @@ authRoutes.post(
       .custom((value, { req }) => {
         return User.findOne({ where: { email: value } }).then((user) => {
           if (user) {
-            return Promise.reject("Duplicated email.");
+            throw new Error("Duplicated email.")
+            // return Promise.reject("Duplicated email.");
           }
         });
         // if (value === "admin@test.com")
