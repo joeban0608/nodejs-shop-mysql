@@ -15,8 +15,8 @@ const AdminEditProductPage = () => {
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   const getProductInfo = async (id: string | string[]) => {
-    const res = await fetch(`http://localhost:8000/products/${id}`, {
-      method: "POST",
+    const res = await fetch(`http://localhost:8000/admin/product/${id}`, {
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
       },

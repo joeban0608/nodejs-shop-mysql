@@ -5,32 +5,6 @@ const isAuthMiddleware = require("../middleware/isAuth");
 const User = require("../models/user");
 
 /* 
-  get product info
-  req.user.getProducts() => products[0]
-  模擬只獲取用戶的 product 資訊
-*/
-productRouter.post("/products/:id", isAuthMiddleware, (req, res, next) => {
-  const pid = req.params.id;
-  // Product.findByPk(pid)
-
-  req.user
-    .getProducts({ where: { id: pid } })
-    .then((products) => {
-      if (!products?.length) {
-        throw new Error("failed to get product");
-      }
-      res.json({ data: products[0] });
-    })
-    .catch((err) => {
-      console.log("err to get product info!", err);
-      res.status(400).json({
-        error: "failed to get product!",
-        reason: err?.message ?? "",
-      });
-    });
-});
-
-/* 
   get all products
 */
 productRouter.get("/products", (req, res, next) => {
