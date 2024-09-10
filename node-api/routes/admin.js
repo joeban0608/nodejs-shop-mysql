@@ -50,7 +50,12 @@ adminRouter.post(
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      res.status(422).json({ error: errors.array()[0].msg });
+      res
+        .status(422)
+        .json({
+          error: errors.array()[0].msg,
+          validationErrors: errors.array(),
+        });
       return next();
     }
 

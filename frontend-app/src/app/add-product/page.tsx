@@ -1,13 +1,55 @@
 "use client";
 import { useRouter } from "next/navigation";
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
+import { ValidationErrorInfo } from "../lib/type";
 
+/* 
+[
+    {
+        "type": "field",
+        "value": "1",
+        "msg": "title at least 3 characters",
+        "path": "title",
+        "location": "body"
+    },
+    {
+        "type": "field",
+        "value": "1",
+        "msg": "image must be url",
+        "path": "imageUrl",
+        "location": "body"
+    },
+    {
+        "type": "field",
+        "value": "1",
+        "msg": "description at least 5 characters, less than 400 characters.",
+        "path": "description",
+        "location": "body"
+    }
+]
+*/
 const AddProductPage = () => {
   const router = useRouter();
   const [title, setTitle] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
+  const [validationErrors, setValidationErrors] = useState<
+    ValidationErrorInfo[]
+  >([]);
+
+  const getErrorMsg = (field: string) => {
+    const errorInfo = validationErrors.find(
+      (validateErrorInfo) => validateErrorInfo.path === field
+    );
+    if (!errorInfo?.msg) return "";
+    return errorInfo.msg;
+  };
+
+  const titleError = getErrorMsg("title");
+  const imageUrlError = getErrorMsg("imageUrl");
+  const priceError = getErrorMsg("price");
+  const descriptionError = getErrorMsg("description");
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -32,11 +74,19 @@ const AddProductPage = () => {
       credentials: "include",
       body: JSON.stringify(bodyInfo),
     })
-      .then((response) => response.json())
+      .then((response) => {
+        console.log("response", response);
+        return response.json();
+      })
       .then((result) => {
+        console.log("result", result);
+        if (result?.validationErrors?.length) {
+          setValidationErrors(result.validationErrors);
+        }
         if (result?.error) {
           throw new Error(result.error);
         }
+        setValidationErrors([]);
         alert(
           `${result?.message ?? "Success Created"}:\n${JSON.stringify(
             bodyInfo
@@ -49,6 +99,9 @@ const AddProductPage = () => {
         alert(`Create Product error: ${error}`);
       });
   };
+  useEffect(() => {
+    getErrorMsg("title");
+  }, [validationErrors]);
 
   return (
     <div className="w-full h-[calc(100%-56px)] flex items-center justify-center">
@@ -66,9 +119,12 @@ const AddProductPage = () => {
             id="title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full px-3 py-2 border rounded"
+            className={`w-full px-3 py-2 border rounded ${
+              titleError ? "border-red-500" : ""
+            }`}
             required
           />
+          <DangerousText text={titleError} />
         </div>
         <div className="mb-4">
           <label htmlFor="imageUrl" className="block text-gray-700">
@@ -79,9 +135,12 @@ const AddProductPage = () => {
             id="imageUrl"
             value={imageUrl}
             onChange={(e) => setImageUrl(e.target.value)}
-            className="w-full px-3 py-2 border rounded"
+            className={`w-full px-3 py-2 border rounded ${
+              imageUrlError ? "border-red-500" : ""
+            }`}
             required
           />
+          <DangerousText text={imageUrlError} />
         </div>
         <div className="mb-4">
           <label htmlFor="price" className="block text-gray-700">
@@ -92,10 +151,13 @@ const AddProductPage = () => {
             id="price"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
-            className="w-full px-3 py-2 border rounded"
+            className={`w-full px-3 py-2 border rounded ${
+              priceError ? "border-red-500" : ""
+            }`}
             step="0.01"
             required
           />
+          <DangerousText text={priceError} />
         </div>
         <div className="mb-4">
           <label htmlFor="description" className="block text-gray-700">
@@ -105,9 +167,12 @@ const AddProductPage = () => {
             id="description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full px-3 py-2 border rounded"
+            className={`w-full px-3 py-2 border rounded ${
+              descriptionError ? "border-red-500" : ""
+            }`}
             required
           />
+          <DangerousText text={descriptionError} />
         </div>
         <button
           type="submit"
@@ -121,3 +186,7 @@ const AddProductPage = () => {
 };
 
 export default AddProductPage;
+
+const DangerousText = ({ text }: { text: string }) => {
+  return text && <p className="text-sm text-red-600">{text}</p>;
+};
