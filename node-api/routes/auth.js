@@ -71,9 +71,14 @@ authRoutes.post(
       .isEmail()
       .withMessage("Please enter a vaild email")
       .custom((value, { req }) => {
-        if (value === "admin@test.com")
-          throw new Error("This email address is forbidden");
-        return true;
+        return User.findOne({ where: { email: value } }).then((user) => {
+          if (user) {
+            return Promise.reject("Duplicated email.");
+          }
+        });
+        // if (value === "admin@test.com")
+        //   throw new Error("This email address is forbidden");
+        // return true;
       }),
     body(
       "password",
@@ -106,35 +111,25 @@ authRoutes.post(
       res.status(401).json({ error: "Password is incorrect." });
       return next();
     }
-    User.findOne({ where: { email: email } })
-      .then((user) => {
-        if (user) {
-          res.status(401).json({ error: "Duplicated email." });
-          return next();
-        }
-        return bcrypt.hash(password, SALT_ROUNDS).then((hashedPassword) => {
-          User.create({
-            email: email,
-            password: hashedPassword,
-          })
-            .then((user) => {
-              return user.createCart();
-            })
-            .then((cart) => {
-              console.log("Success to Created User and cart, cartInfo:", cart);
-              res.json({ message: `Success to Created User: ${email}` });
-            })
-            .catch((err) => {
-              console.log("Create User Failed err:", err);
-              res.status(400).json({ error: "Create User Failed" });
-              return next();
-            });
-        });
+
+    bcrypt.hash(password, SALT_ROUNDS).then((hashedPassword) => {
+      User.create({
+        email: email,
+        password: hashedPassword,
       })
-      .catch((err) => {
-        console.log("Create User when find user Error:", err);
-        res.status(500).json({ error: "Create User when find user Error" });
-      });
+        .then((user) => {
+          return user.createCart();
+        })
+        .then((cart) => {
+          console.log("Success to Created User and cart, cartInfo:", cart);
+          res.json({ message: `Success to Created User: ${email}` });
+        })
+        .catch((err) => {
+          console.log("Create User Failed err:", err);
+          res.status(400).json({ error: "Create User Failed" });
+          return next();
+        });
+    });
   }
 );
 
