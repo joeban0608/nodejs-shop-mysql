@@ -19,6 +19,7 @@ export type ProductsRes = {
 };
 export type ProductInfoRes = {
   data: ProductInfo;
+  error?: string;
 };
 
 export type CartItem = {

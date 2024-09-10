@@ -56,7 +56,11 @@ app.use(cartRoutes);
 app.use(orderRoutes);
 app.use(authRoutes);
 app.use(adminRouter);
-
+app.use((error, req, res, next) => {
+  console.log("error in app.js", error);
+  res.status(500).json({ error: "Something Failed!" });
+  next();
+});
 /* 
   onDelete: "CASECADE" 為當 User 刪除，及刪除 product
 */

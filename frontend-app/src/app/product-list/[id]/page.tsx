@@ -2,17 +2,27 @@ import type { ProductInfo, ProductInfoRes } from "@/app/lib/type";
 import React from "react";
 
 const ProductPage = async ({ params }: { params: { id: string } }) => {
-  const pid = params.id;
-  if (!pid) return <div>product not found</div>;
-  const url = `http://localhost:8000/product/${pid}`;
-  const res = await fetch(url, {
-    method: "GET",
-    credentials: "include",
-    cache: "no-store",
-  });
-  const productRes = (await res.json()) as ProductInfoRes;
-  const product = productRes.data;
-  return <ProductInfo {...product} />;
+  try {
+    const pid = params.id;
+    if (!pid) return <div>product not found</div>;
+    const url = `http://localhost:8000/product/${pid}`;
+    const res = await fetch(url, {
+      method: "GET",
+      credentials: "include",
+      cache: "no-store",
+    });
+    const productRes = (await res.json()) as ProductInfoRes;
+    // from api server
+    if (productRes.error) {
+      return productRes.error;
+    }
+    // console.log("productRes", productRes);
+
+    const product = productRes.data;
+    return <ProductInfo {...product} />;
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 export default ProductPage;
