@@ -16,7 +16,7 @@ const AddProductPage = () => {
       alert("some form value not found");
       return;
     }
-    const url = "http://localhost:8000/products";
+    const url = "http://localhost:8000/admin/add-product";
     const bodyInfo = {
       title: title,
       imageUrl: imageUrl,

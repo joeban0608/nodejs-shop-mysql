@@ -65,18 +65,18 @@ Product.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
 User.hasMany(Product);
 User.hasOne(Cart);
 Cart.belongsTo(User);
-Cart.belongsToMany(Product, { through: CartItem });
-Product.belongsToMany(Cart, { through: CartItem });
+Cart.belongsToMany(Product, { through: CartItem, onDelete: "CASCADE" });
+Product.belongsToMany(Cart, { through: CartItem, onDelete: "CASCADE" });
 Order.belongsTo(User);
 User.hasMany(Order);
 Order.belongsToMany(Product, {
   through: OrderItem,
   onDelete: "CASCADE", // This ensures order items are deleted when an order is deleted
 });
-Product.belongsToMany(Order, { through: OrderItem });
+Product.belongsToMany(Order, { through: OrderItem, onDelete: "CASCADE" });
 
 sequelize
-  // .sync({ force: true }) // {force: true} 用來強制刪除表單，並重新建立表單
+  // .sync({ force: true }) // {force: true} 用來 強制刪除表單，並重新建立表單
   .sync()
   .then((result) => {
     console.log("sequelize success! start server 8000");
