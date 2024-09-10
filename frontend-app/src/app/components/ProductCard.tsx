@@ -4,6 +4,7 @@ import type { ProductInfo } from "../lib/type";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import useAuth from "../hooks/useAuth";
+import { mutate } from "swr";
 
 const ProductCard = ({
   id,
@@ -86,16 +87,16 @@ const ShopButtons = ({ id }: { id: string }) => {
 };
 
 const AdminButtons = ({ id }: { id: string }) => {
-  const router = useRouter();
+  const { user } = useAuth();
   const handleDelete = async () => {
-    fetch(`http://localhost:8000/products/${id}`, {
+    fetch(`http://localhost:8000/delete-product/${id}`, {
       method: "DELETE",
       credentials: "include",
     })
       .then((response) => response.json())
-      .then((result) => {
+      .then(async (result) => {
         alert(`${result?.message ?? "Success to delete Product!"}`);
-        router.refresh();
+        await mutate(["api/products", user]);
       })
       .catch((error) => {
         alert(`Error to delete Product: ${JSON.stringify(error.message)}`);

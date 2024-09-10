@@ -5,7 +5,7 @@ const isAuthMiddleware = require("../middleware/isAuth");
 const User = require("../models/user");
 
 // delete product
-productRouter.delete("/products/:id", (req, res, next) => {
+productRouter.delete("/delete-product/:id", (req, res, next) => {
   const pid = req.params.id;
   Product.findByPk(pid)
     .then((product) => {
