@@ -4,34 +4,6 @@ const Product = require("../models/product");
 const isAuthMiddleware = require("../middleware/isAuth");
 const User = require("../models/user");
 
-// update product
-productRouter.put("/products/:id", (req, res, next) => {
-  const pid = req.params.id;
-  const updatedTitle = req.body.title;
-  const updatedPrice = req.body.price;
-  const updatedImageUrl = req.body.imageUrl;
-  const updatedDescription = req.body.description;
-  Product.findByPk(pid)
-    .then((product) => {
-      product.title = updatedTitle;
-      product.price = updatedPrice;
-      product.imageUrl = updatedImageUrl;
-      product.description = updatedDescription;
-      // return product.save(); 使用下一個 .then 做 .save 的 response
-      return product.save();
-    })
-    .then((result) => {
-      res.status(201).json({ message: "UPDATED SUCCESS!" });
-    })
-    .catch((err) => {
-      console.log("err to update prodcut!", err);
-      res.status(400).json({
-        error: "failed to update product!",
-        reason: err?.message ?? "",
-      });
-    });
-});
-
 /* 
   get product info
   req.user.getProducts() => products[0]

@@ -40,7 +40,7 @@ const AdminEditProductPage = () => {
       alert("some value not found");
       return;
     }
-    const url = `http://localhost:8000/products/${id}`;
+    const url = `http://localhost:8000/admin/edit-product/${id}`;
     const bodyInfo = {
       title: title,
       imageUrl: imageUrl,
