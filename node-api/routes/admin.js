@@ -2,7 +2,7 @@ const express = require("express");
 const adminRouter = express.Router();
 const Product = require("../models/product");
 const isAuthMiddleware = require("../middleware/isAuth");
-const User = require("../models/user");
+const { check, validationResult, body } = require("express-validator");
 
 // delete product
 adminRouter.delete(
@@ -29,44 +29,69 @@ adminRouter.delete(
 );
 
 // add product
-adminRouter.post("/admin/add-product", isAuthMiddleware, (req, res, next) => {
-  const title = req.body.title;
-  const imageUrl = req.body.imageUrl;
-  const price = req.body.price;
-  const description = req.body.description;
-  /* 
+adminRouter.post(
+  "/admin/add-product",
+  [
+    body("title", "title at least 3 characters")
+      .isString()
+      .isLength({ min: 3 })
+      .trim(),
+    body("imageUrl", "image must be url").isURL(),
+    body("price", "price must be number.").isFloat(),
+    body(
+      "description",
+      "description at least 5 characters, less than 400 characters."
+    )
+      .isLength({ min: 5, max: 400 })
+      .trim(),
+  ],
+  isAuthMiddleware,
+  (req, res, next) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      res.status(422).json({ error: errors.array()[0].msg });
+      return next();
+    }
+
+    const title = req.body.title;
+    const imageUrl = req.body.imageUrl;
+    const price = req.body.price;
+    const description = req.body.description;
+    /* 
     create vs build
     create auto finish 
     build have to manual finish
   */
-  const productInfo = {
-    title: title,
-    imageUrl: imageUrl,
-    price: price,
-    description: description,
-  };
+    const productInfo = {
+      title: title,
+      imageUrl: imageUrl,
+      price: price,
+      description: description,
+    };
 
-  /* 
+    /* 
     req.user 從 app.js 新增過來的，
     透過 sequlize 的機制，當使用 User.hasMany(Product); ... method 會自動建立 createProduct
     ref: https://sequelize.org/docs/v6/core-concepts/assocs/#special-methodsmixins-added-to-instances
   */
-  // Product.create(productInfo)
+    // Product.create(productInfo)
 
-  req.user
-    .createProduct(productInfo)
-    .then((result) => {
-      res
-        .status(201)
-        .json({ message: "Prdouct Created!", product: productInfo });
-    })
-    .catch((err) => {
-      console.log("product create err", err);
-      res
-        .status(400)
-        .json({ error: "failed to created!", reason: err?.message ?? "" });
-    });
-});
+    req.user
+      .createProduct(productInfo)
+      .then((result) => {
+        res
+          .status(201)
+          .json({ message: "Prdouct Created!", product: productInfo });
+      })
+      .catch((err) => {
+        console.log("product create err", err);
+        res
+          .status(400)
+          .json({ error: "failed to created!", reason: err?.message ?? "" });
+      });
+  }
+);
 
 // update product
 adminRouter.put(
