@@ -86,11 +86,11 @@
 - [15-271 Useful Resources & Links](https://www.notion.so/15-271-Useful-Resources-Links-0b8221036e204f8eaa0125a7c8a48c71?pvs=21)
 - 網頁 | 後台 | 資料庫 攻擊： - XSS (跨站腳本攻擊) - https://developer.mozilla.org/en-US/docs/Web/Security/Types_of_attacks#cross-site_scripting_xss - 防範：具有該屬性的 cookie`HttpOnly`不能由 JavaScript 修改，例如使用[`Document.cookie`](https://developer.mozilla.org/en-US/docs/Web/API/Document/cookie);只有當它到達伺服器時才能修改。例如，保存使用者會話的 Cookie 應該設定`HttpOnly`屬性 - 讓 JavaScript 可以使用它們確實是不安全的。此預防措施有助於減輕跨網站腳本 ( [XSS](https://developer.mozilla.org/en-US/docs/Web/Security/Types_of_attacks#cross-site_scripting_xss) ) 攻擊。 - X-XSS-Protection - http protection code
   `jsx
-            X-XSS-Protection: 0
-            X-XSS-Protection: 1
-            X-XSS-Protection: 1; mode=block
-            X-XSS-Protection: 1; report=<reporting-uri>
-            `
+        X-XSS-Protection: 0
+        X-XSS-Protection: 1
+        X-XSS-Protection: 1; mode=block
+        X-XSS-Protection: 1; report=<reporting-uri>
+        `
 
                     - https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection
 
@@ -110,3 +110,22 @@
   [自己專案內實作：](https://www.notion.so/b9249382625346b4b6d5e2b00192fdf1?pvs=21)
 - npm bcrypt：https://www.npmjs.com/package/bcrypt
 - More on CSRF Attacks: https://www.acunetix.com/websitesecurity/csrf-attacks/
+
+# 第十八章 UnderStanding Validation
+
+- [18-293 Steup & Basic Validation](https://www.notion.so/18-293-Steup-Basic-Validation-c92c90c6f02748709e9403a7f380fbfe)
+- [18-294 Using Validation Error Message](https://www.notion.so/18-294-Using-Validation-Error-Message-393ec0b147c2431fa1c5098da3de7d6a?pvs=21)
+- [18-295 Built-in & Custom Validators](https://www.notion.so/18-295-Built-in-Custom-Validators-892df4c17c9b46b1b7fc0d5c783ccb12?pvs=21)
+- [18-296 Ｍ ore Validators](https://www.notion.so/18-296-ore-Validators-575ee6d1f3bc42a387c523b57493e191?pvs=21)
+- [18-297 checking For Field Equality](https://www.notion.so/18-297-checking-For-Field-Equality-995e3a94741e40959bec0d7a0154289f?pvs=21)
+- [18-298 Adding Async Validation](https://www.notion.so/18-298-Adding-Async-Validation-ffac21c55ec246218ba6e844cd4cc8ad?pvs=21)
+- [18-303 validating Product Addition](https://www.notion.so/18-303-validating-Product-Addition-251be73d2acc4abe8a0f2837b41c0cc3?pvs=21)
+- [18-304 Validation Product Editing](https://www.notion.so/18-304-Validation-Product-Editing-2637218d9929407b8f7e80ebb43ad25d?pvs=21)
+
+resource:
+
+- npm express-validator: https://www.npmjs.com/package/express-validator
+- Github: https://github.com/express-validator/express-validator
+- express-validator official: https://express-validator.github.io/docs
+- express-validator doc check api: https://express-validator.github.io/docs/api/check
+- Async Validation: https://express-validator.github.io/docs/guides/customizing/#custom-validators-and-sanitizers
