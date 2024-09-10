@@ -89,7 +89,7 @@ const ShopButtons = ({ id }: { id: string }) => {
 const AdminButtons = ({ id }: { id: string }) => {
   const { user } = useAuth();
   const handleDelete = async () => {
-    fetch(`http://localhost:8000/delete-product/${id}`, {
+    fetch(`http://localhost:8000/admin/delete-product/${id}`, {
       method: "DELETE",
       credentials: "include",
     })

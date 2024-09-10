@@ -13,6 +13,7 @@ const orderRoutes = require("./routes/order");
 const app = express();
 const session = require("express-session");
 const authRoutes = require("./routes/auth");
+const adminRouter = require("./routes/admin");
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
 
 app.use(bodyParser.json());
@@ -54,6 +55,7 @@ app.use(productRoutes);
 app.use(cartRoutes);
 app.use(orderRoutes);
 app.use(authRoutes);
+app.use(adminRouter);
 
 /* 
   onDelete: "CASECADE" 為當 User 刪除，及刪除 product
