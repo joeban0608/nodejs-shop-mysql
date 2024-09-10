@@ -126,4 +126,22 @@ adminRouter.get("/admin/product/:id", isAuthMiddleware, (req, res, next) => {
     });
 });
 
+/* 
+  get admin products
+*/
+adminRouter.get("/admin/products", (req, res, next) => {
+  req.user
+    .getProducts()
+    .then((prdoucts) => {
+      console.log("prdoucts", prdoucts);
+      res.json({ data: prdoucts });
+    })
+    .catch((err) => {
+      console.log("err to get all products", err);
+      res
+        .status(400)
+        .json({ error: "failed to get products!", reason: err?.message ?? "" });
+    });
+});
+
 module.exports = adminRouter;

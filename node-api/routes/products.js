@@ -26,6 +26,8 @@ productRouter.get("/products", (req, res, next) => {
         .json({ error: "failed to get products!", reason: err?.message ?? "" });
     });
 });
+
+/* get product info */
 productRouter.get("/product/:id", (req, res, next) => {
   const pid = req.params.id;
 
@@ -33,23 +35,6 @@ productRouter.get("/product/:id", (req, res, next) => {
     .then((product) => {
       console.log("product", product);
       res.json({ data: product[0] });
-    })
-    .catch((err) => {
-      console.log("err to get all products", err);
-      res
-        .status(400)
-        .json({ error: "failed to get products!", reason: err?.message ?? "" });
-    });
-});
-/* 
-  get admin products
-*/
-productRouter.get("/admin/products", (req, res, next) => {
-  req.user
-    .getProducts()
-    .then((prdoucts) => {
-      console.log("prdoucts", prdoucts);
-      res.json({ data: prdoucts });
     })
     .catch((err) => {
       console.log("err to get all products", err);
