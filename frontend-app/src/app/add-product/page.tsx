@@ -3,31 +3,6 @@ import { useRouter } from "next/navigation";
 import React, { FormEvent, useEffect, useState } from "react";
 import { ValidationErrorInfo } from "../lib/type";
 
-/* 
-[
-    {
-        "type": "field",
-        "value": "1",
-        "msg": "title at least 3 characters",
-        "path": "title",
-        "location": "body"
-    },
-    {
-        "type": "field",
-        "value": "1",
-        "msg": "image must be url",
-        "path": "imageUrl",
-        "location": "body"
-    },
-    {
-        "type": "field",
-        "value": "1",
-        "msg": "description at least 5 characters, less than 400 characters.",
-        "path": "description",
-        "location": "body"
-    }
-]
-*/
 const AddProductPage = () => {
   const router = useRouter();
   const [title, setTitle] = useState("");
@@ -75,11 +50,9 @@ const AddProductPage = () => {
       body: JSON.stringify(bodyInfo),
     })
       .then((response) => {
-        console.log("response", response);
         return response.json();
       })
       .then((result) => {
-        console.log("result", result);
         if (result?.validationErrors?.length) {
           setValidationErrors(result.validationErrors);
         }
