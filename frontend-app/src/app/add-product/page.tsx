@@ -6,7 +6,7 @@ import { ValidationErrorInfo } from "../lib/type";
 const AddProductPage = () => {
   const router = useRouter();
   const [title, setTitle] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
+  // const [imageUrl, setImageUrl] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   const [validationErrors, setValidationErrors] = useState<
@@ -29,25 +29,31 @@ const AddProductPage = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     // Handle form submission logic here
-    if (!title || !imageUrl || !price || !description) {
+    if (!title || !price || !description) {
       alert("some form value not found");
       return;
     }
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("image", (e.target as HTMLFormElement).image.files[0]); // 從 input[type="file"] 取得文件
+    formData.append("price", price);
+    formData.append("description", description);
     const url = "http://localhost:8000/admin/add-product";
-    const bodyInfo = {
-      title: title,
-      imageUrl: imageUrl,
-      price: parseFloat(price),
-      description: description,
-    };
-
+    // const bodyInfo = {
+    //   title: title,
+    //   imageUrl: imageUrl,
+    //   price: parseFloat(price),
+    //   description: description,
+    // };
+    console.log("formData", formData);
     fetch(url, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      // headers: {
+      //   // "Content-Type": "application/json",
+      //   "Content-Type": "application/json",
+      // },
       credentials: "include",
-      body: JSON.stringify(bodyInfo),
+      body: formData,
     })
       .then((response) => {
         return response.json();
@@ -62,7 +68,7 @@ const AddProductPage = () => {
         setValidationErrors([]);
         alert(
           `${result?.message ?? "Success Created"}:\n${JSON.stringify(
-            bodyInfo
+            formData
           )}`
         );
         router.push("/admin/product-list");
@@ -79,6 +85,7 @@ const AddProductPage = () => {
   return (
     <div className="w-full h-[calc(100%-56px)] flex items-center justify-center">
       <form
+        encType="multipart/form-data"
         onSubmit={handleSubmit}
         className="mx-auto p-4 bg-white rounded shadow-md text-gray-900"
         style={{ width: "32rem" }}
@@ -100,7 +107,7 @@ const AddProductPage = () => {
           <DangerousText text={titleError} />
         </div>
         <div className="mb-4">
-          <label htmlFor="imageUrl" className="block text-gray-700">
+          {/* <label htmlFor="imageUrl" className="block text-gray-700">
             Image URL
           </label>
           <input
@@ -108,6 +115,20 @@ const AddProductPage = () => {
             id="imageUrl"
             value={imageUrl}
             onChange={(e) => setImageUrl(e.target.value)}
+            className={`w-full px-3 py-2 border rounded ${
+              imageUrlError ? "border-red-500" : ""
+            }`}
+            required
+          />
+          <DangerousText text={imageUrlError} /> */}
+          <label htmlFor="image" className="block text-gray-700">
+            Image
+          </label>
+          <input
+            type="file"
+            id="image"
+            // value={imageUrl}
+            // onChange={(e) => setImageUrl(e.target.value)}
             className={`w-full px-3 py-2 border rounded ${
               imageUrlError ? "border-red-500" : ""
             }`}

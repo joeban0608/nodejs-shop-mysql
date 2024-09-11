@@ -15,8 +15,11 @@ const session = require("express-session");
 const authRoutes = require("./routes/auth");
 const adminRouter = require("./routes/admin");
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
+const multer = require("multer");
 
 app.use(bodyParser.json());
+app.use(multer({ dest: "images" }).single("image"));
+
 app.use(
   session({
     secret: "my secret",

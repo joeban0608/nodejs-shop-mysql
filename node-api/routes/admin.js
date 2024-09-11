@@ -36,7 +36,7 @@ adminRouter.post(
       .isString()
       .isLength({ min: 3 })
       .trim(),
-    body("imageUrl", "image must be url").isURL(),
+    // body("imageUrl", "image must be url").isURL(),
     body("price", "price must be number.").isFloat(),
     body(
       "description",
@@ -47,22 +47,21 @@ adminRouter.post(
   ],
   isAuthMiddleware,
   (req, res, next) => {
+    const title = req.body.title;
+    const imageUrl = req.file;
+    const price = req.body.price;
+    const description = req.body.description;
+    console.log("imageUrl", imageUrl);
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      res
-        .status(422)
-        .json({
-          error: errors.array()[0].msg,
-          validationErrors: errors.array(),
-        });
+      res.status(422).json({
+        error: errors.array()[0].msg,
+        validationErrors: errors.array(),
+      });
       return next();
     }
 
-    const title = req.body.title;
-    const imageUrl = req.body.imageUrl;
-    const price = req.body.price;
-    const description = req.body.description;
     /* 
     create vs build
     create auto finish 
