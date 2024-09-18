@@ -18,7 +18,16 @@ const SequelizeStore = require("connect-session-sequelize")(session.Store);
 const multer = require("multer");
 
 app.use(bodyParser.json());
-app.use(multer({ dest: "images" }).single("image"));
+const fileStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "images");
+  },
+  filename: (req, file, cb) => {
+    // cb(null, file.filename + "-" + file.originalname);
+    cb(null, new Date().toISOString() + "-" + file.originalname);
+  },
+});
+app.use(multer({ storage: fileStorage }).single("image"));
 
 app.use(
   session({
