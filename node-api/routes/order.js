@@ -1,6 +1,8 @@
 const express = require("express");
 const orderRoutes = express.Router();
 const isAuthMiddleware = require("../middleware/isAuth");
+const path = require("path");
+const fs = require("fs");
 
 // create order
 orderRoutes.post("/order", isAuthMiddleware, (req, res, next) => {
@@ -63,6 +65,29 @@ orderRoutes.get("/orders", isAuthMiddleware, (req, res, next) => {
       console.log("get orders err", err);
       res.status(400).json({ error: `Get orders err: ${err.message}` });
     });
+});
+
+// get order by id
+orderRoutes.get("/orders/:oid", isAuthMiddleware, (req, res, next) => {
+  const oid = req.params.oid;
+  const invoiceName = "invoice-" + oid + ".pdf";
+  const invoicePath = path.join("invoices", invoiceName);
+  fs.readFile(invoicePath, (err, data) => {
+    if (err) {
+      console.log("read order err", err);
+      return next(err);
+    }
+    res.send(data);
+  });
+  // req.user
+  //   .getOrders({ include: ["products"] })
+  //   .then((orders) => {
+  //     res.json({ data: orders });
+  //   })
+  //   .catch((err) => {
+  //     console.log("get orders err", err);
+  //     res.status(400).json({ error: `Get orders err: ${err.message}` });
+  //   });
 });
 
 module.exports = orderRoutes;

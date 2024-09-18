@@ -86,6 +86,7 @@ const navList = [
   // { href: "/product-list", name: "Products", isShowType: "both" },
   { href: "/cart", name: "Cart", isShowType: "login" },
   { href: "/order", name: "Orders", isShowType: "login" },
+  { href: "/order-invoice", name: "Orders Invoice", isShowType: "login" },
   { href: "/add-product", name: "Add Product", isShowType: "login" },
   { href: "/admin", name: "Admin Product", isShowType: "login" },
 ];
