@@ -79,15 +79,6 @@ orderRoutes.get("/orders/:oid", isAuthMiddleware, (req, res, next) => {
     }
     res.send(data);
   });
-  // req.user
-  //   .getOrders({ include: ["products"] })
-  //   .then((orders) => {
-  //     res.json({ data: orders });
-  //   })
-  //   .catch((err) => {
-  //     console.log("get orders err", err);
-  //     res.status(400).json({ error: `Get orders err: ${err.message}` });
-  //   });
 });
 
 module.exports = orderRoutes;
