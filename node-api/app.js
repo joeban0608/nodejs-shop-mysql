@@ -18,6 +18,7 @@ const SequelizeStore = require("connect-session-sequelize")(session.Store);
 const multer = require("multer");
 
 app.use(bodyParser.json());
+/*  fileStorage, and fileFilter for multer 的 config */
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "images");
@@ -27,7 +28,17 @@ const fileStorage = multer.diskStorage({
     cb(null, new Date().toISOString() + "-" + file.originalname);
   },
 });
-app.use(multer({ storage: fileStorage }).single("image"));
+const fileFilter = (req, file, cb) => {
+  const filterTypes = ["image/png", "image/jpg", "image/jpeg", "image/webp"];
+  if (filterTypes.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
+app.use(
+  multer({ storage: fileStorage, fileFilter: fileFilter }).single("image")
+);
 
 app.use(
   session({
