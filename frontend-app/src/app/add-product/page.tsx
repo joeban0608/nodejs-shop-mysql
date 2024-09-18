@@ -119,7 +119,7 @@ const AddProductPage = () => {
             }`}
             required
           />
-          <DangerousText text={imageUrlError} />
+          {/* <DangerousText text={imageUrlError} /> */}
         </div>
         <div className="mb-4">
           <label htmlFor="price" className="block text-gray-700">

@@ -18,7 +18,11 @@ const adminRouter = require("./routes/admin");
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
 const multer = require("multer");
 
+// 設定更大的限制
+app.use(bodyParser.json({ limit: "10mb" })); // 設定 JSON 請求大小限制為 10MB
+app.use(bodyParser.urlencoded({ limit: "10mb", extended: true })); // 設定 URL-encoded 請求大小限制為 10MB
 app.use(bodyParser.json());
+
 /*  fileStorage, and fileFilter for multer 的 config */
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
