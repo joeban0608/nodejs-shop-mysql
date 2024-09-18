@@ -3,6 +3,7 @@ const adminRouter = express.Router();
 const Product = require("../models/product");
 const isAuthMiddleware = require("../middleware/isAuth");
 const { check, validationResult, body } = require("express-validator");
+const fileHelper = require("../util/file");
 
 // delete product
 adminRouter.delete(
@@ -12,7 +13,16 @@ adminRouter.delete(
     const pid = req.params.id;
     Product.findByPk(pid)
       .then((product) => {
-        return product.destroy();
+        if (!product) {
+          return next(new Error("Product not found."));
+        }
+        fileHelper.deleteFile(product.imageUrl);
+        return product.destroy({
+          where: {
+            id: pid, // 確保刪除特定產品
+            userId: req.user.id, // 可選：如果｀需要確保是該用戶的產品
+          },
+        });
       })
       .then((result) => {
         console.log("DESTROYED PROUDCT!");
@@ -133,6 +143,8 @@ adminRouter.put(
         product.title = updatedTitle;
         product.price = updatedPrice;
         if (updatedImage) {
+          // 如果使用者有上傳檔案，刪除舊的圖片檔案
+          fileHelper.deleteFile(product.imageUrl);
           product.imageUrl = updatedImage.path;
         }
         product.description = updatedDescription;
