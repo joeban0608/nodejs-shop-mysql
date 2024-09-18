@@ -33,7 +33,7 @@ const ProductInfo = (product: ProductInfo) => {
       <div className="bg-white shadow-lg rounded-lg overflow-hidden">
         <img
           className="w-full h-64 object-cover object-center"
-          src={product.imageUrl}
+          src={`http://localhost:8000/${product.imageUrl}`}
           alt={product.title}
         />
         <div className="p-4">

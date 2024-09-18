@@ -16,7 +16,11 @@ const ProductCard = ({
   user,
 }: ProductInfo & { page: string }) => (
   <div className="bg-white shadow-md rounded-lg overflow-hidden">
-    <img className="w-full h-48 object-cover" src={imageUrl} alt={title} />
+    <img
+      className="w-full h-48 object-cover"
+      src={`http://localhost:8000/${imageUrl}`}
+      alt={title}
+    />
     <div className="p-4">
       <h2 className="text-xl font-semibold text-gray-800">{title}</h2>
       <p className="text-gray-600 mt-2">${price.toFixed(2)}</p>
