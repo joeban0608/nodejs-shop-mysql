@@ -1,9 +1,10 @@
 "use client";
-import { ProductInfoRes } from "@/app/lib/type";
+import { ProductInfoRes, ValidationErrorInfo } from "@/app/lib/type";
 import React, { FormEvent, useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import useSWR from "swr";
 import Loading from "@/app/components/Loading";
+import { DangerousText } from "@/app/add-product/page";
 
 const AdminEditProductPage = () => {
   const router = useRouter();
@@ -11,9 +12,11 @@ const AdminEditProductPage = () => {
   const { id } = useParams();
 
   const [title, setTitle] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
+  const [validationErrors, setValidationErrors] = useState<
+    ValidationErrorInfo[]
+  >([]);
   const getProductInfo = async (id: string | string[]) => {
     const res = await fetch(`http://localhost:8000/admin/product/${id}`, {
       method: "GET",
@@ -29,6 +32,18 @@ const AdminEditProductPage = () => {
   const { data, error, isLoading } = useSWR(id ? ["/products", id] : null, () =>
     getProductInfo(id)
   );
+  const getErrorMsg = (field: string) => {
+    const errorInfo = validationErrors.find(
+      (validateErrorInfo) => validateErrorInfo.path === field
+    );
+    if (!errorInfo?.msg) return "";
+    return errorInfo.msg;
+  };
+
+  const titleError = getErrorMsg("title");
+  const imageUrlError = getErrorMsg("imageUrl");
+  const priceError = getErrorMsg("price");
+  const descriptionError = getErrorMsg("description");
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -36,14 +51,13 @@ const AdminEditProductPage = () => {
       alert("product id not found");
     }
     // Handle form submission logic here
-    if (!title || !imageUrl || !price || !description) {
+    if (!title || !price || !description) {
       alert("some value not found");
       return;
     }
     const url = `http://localhost:8000/admin/edit-product/${id}`;
     const bodyInfo = {
       title: title,
-      imageUrl: imageUrl,
       price: parseFloat(price),
       description: description,
     };
@@ -58,6 +72,13 @@ const AdminEditProductPage = () => {
     })
       .then((response) => response.json())
       .then((result) => {
+        if (result?.validationErrors?.length) {
+          setValidationErrors(result.validationErrors);
+        }
+        if (result?.error) {
+          throw new Error(result.error);
+        }
+        setValidationErrors([]);
         alert("Updated Success!");
         router.push(`/admin/product-list`);
       })
@@ -70,12 +91,10 @@ const AdminEditProductPage = () => {
   useEffect(() => {
     if (!data) return;
     setTitle(data.title);
-    setImageUrl(data.imageUrl);
     setDescription(data.description);
     setPrice(data.price.toString());
     return () => {
       setTitle("");
-      setImageUrl("");
       setDescription("");
       setPrice("");
     };
@@ -104,22 +123,26 @@ const AdminEditProductPage = () => {
             id="title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full px-3 py-2 border rounded"
+            className={`w-full px-3 py-2 border rounded ${
+              titleError ? "border-red-500" : ""
+            }`}
             required
           />
+          <DangerousText text={titleError} />
         </div>
         <div className="mb-4">
-          <label htmlFor="imageUrl" className="block text-gray-700">
-            Image URL
+          <label htmlFor="image" className="block text-gray-700">
+            Image
           </label>
           <input
-            type="text"
-            id="imageUrl"
-            value={imageUrl}
-            onChange={(e) => setImageUrl(e.target.value)}
-            className="w-full px-3 py-2 border rounded"
+            type="file"
+            id="image"
+            className={`w-full px-3 py-2 border rounded ${
+              imageUrlError ? "border-red-500" : ""
+            }`}
             required
           />
+          <DangerousText text={imageUrlError} />
         </div>
         <div className="mb-4">
           <label htmlFor="price" className="block text-gray-700">
@@ -130,10 +153,13 @@ const AdminEditProductPage = () => {
             id="price"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
-            className="w-full px-3 py-2 border rounded"
+            className={`w-full px-3 py-2 border rounded ${
+              priceError ? "border-red-500" : ""
+            }`}
             step="0.01"
             required
           />
+          <DangerousText text={priceError} />
         </div>
         <div className="mb-4">
           <label htmlFor="description" className="block text-gray-700">
@@ -143,9 +169,12 @@ const AdminEditProductPage = () => {
             id="description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full px-3 py-2 border rounded"
+            className={`w-full px-3 py-2 border rounded ${
+              descriptionError ? "border-red-500" : ""
+            }`}
             required
           />
+          <DangerousText text={descriptionError} />
         </div>
         <button
           type="submit"

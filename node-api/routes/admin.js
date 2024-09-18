@@ -48,10 +48,17 @@ adminRouter.post(
   isAuthMiddleware,
   (req, res, next) => {
     const title = req.body.title;
-    const imageUrl = req.file;
+    const image = req.file;
     const price = req.body.price;
     const description = req.body.description;
-    console.log("imageUrl", imageUrl);
+    if (!image) {
+      res.status(422).json({
+        error: "Attached file is not an image",
+        validationErrors: [],
+      });
+      return next();
+    }
+    const imageUrl = image.path;
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -80,7 +87,7 @@ adminRouter.post(
     ref: https://sequelize.org/docs/v6/core-concepts/assocs/#special-methodsmixins-added-to-instances
   */
     // Product.create(productInfo)
-
+    console.log("productInfo", productInfo);
     req.user
       .createProduct(productInfo)
       .then((result) => {
@@ -100,18 +107,34 @@ adminRouter.post(
 // update product
 adminRouter.put(
   "/admin/edit-product/:id",
+  [
+    body("title", "title at least 3 characters")
+      .isString()
+      .isLength({ min: 3 })
+      .trim(),
+    // body("imageUrl", "image must be url").isURL(),
+    body("price", "price must be number.").isFloat(),
+    body(
+      "description",
+      "description at least 5 characters, less than 400 characters."
+    )
+      .isLength({ min: 5, max: 400 })
+      .trim(),
+  ],
   isAuthMiddleware,
   (req, res, next) => {
     const pid = req.params.id;
     const updatedTitle = req.body.title;
     const updatedPrice = req.body.price;
-    const updatedImageUrl = req.body.imageUrl;
+    const updatedImage = req.file;
     const updatedDescription = req.body.description;
     Product.findByPk(pid)
       .then((product) => {
         product.title = updatedTitle;
         product.price = updatedPrice;
-        product.imageUrl = updatedImageUrl;
+        if (updatedImage) {
+          product.imageUrl = updatedImage.path;
+        }
         product.description = updatedDescription;
         // return product.save(); 使用下一個 .then 做 .save 的 response
         return product.save();
@@ -162,7 +185,7 @@ adminRouter.get("/admin/products", (req, res, next) => {
   req.user
     .getProducts()
     .then((prdoucts) => {
-      console.log("prdoucts", prdoucts);
+      // console.log("prdoucts", prdoucts);
       res.json({ data: prdoucts });
     })
     .catch((err) => {

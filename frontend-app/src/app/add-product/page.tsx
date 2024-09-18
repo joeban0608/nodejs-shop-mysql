@@ -6,7 +6,6 @@ import { ValidationErrorInfo } from "../lib/type";
 const AddProductPage = () => {
   const router = useRouter();
   const [title, setTitle] = useState("");
-  // const [imageUrl, setImageUrl] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   const [validationErrors, setValidationErrors] = useState<
@@ -68,7 +67,7 @@ const AddProductPage = () => {
         setValidationErrors([]);
         alert(
           `${result?.message ?? "Success Created"}:\n${JSON.stringify(
-            formData
+            result?.product ?? { product: "product info..." }
           )}`
         );
         router.push("/admin/product-list");
@@ -107,20 +106,6 @@ const AddProductPage = () => {
           <DangerousText text={titleError} />
         </div>
         <div className="mb-4">
-          {/* <label htmlFor="imageUrl" className="block text-gray-700">
-            Image URL
-          </label>
-          <input
-            type="text"
-            id="imageUrl"
-            value={imageUrl}
-            onChange={(e) => setImageUrl(e.target.value)}
-            className={`w-full px-3 py-2 border rounded ${
-              imageUrlError ? "border-red-500" : ""
-            }`}
-            required
-          />
-          <DangerousText text={imageUrlError} /> */}
           <label htmlFor="image" className="block text-gray-700">
             Image
           </label>
@@ -181,6 +166,6 @@ const AddProductPage = () => {
 
 export default AddProductPage;
 
-const DangerousText = ({ text }: { text: string }) => {
+export const DangerousText = ({ text }: { text: string }) => {
   return text && <p className="text-sm text-red-600">{text}</p>;
 };
