@@ -128,3 +128,28 @@ resource:
 - express-validator official: https://express-validator.github.io/docs
 - express-validator doc check api: https://express-validator.github.io/docs/api/check
 - Async Validation: https://express-validator.github.io/docs/guides/customizing/#custom-validators-and-sanitizers
+
+---
+# 第二十章 File Upload & Download
+- [20-321. Adding a File Picker to the Frontend](https://www.notion.so/20-321-Adding-a-File-Picker-to-the-Frontend-891d6dd521934fc7ba5a84e44211aa35)
+- [20-321 Adding a File Picker to the Frontend](https://www.notion.so/20-321-Adding-a-File-Picker-to-the-Frontend-b9badb6b83414152998b96ed0fc64439?pvs=21)
+- [20-322 Handling Multipart Form Data | 323 Handling File Uploads with Multer](https://www.notion.so/20-322-Handling-Multipart-Form-Data-323-Handling-File-Uploads-with-Multer-e2f7cf4d64bc4ee29448a8e53403d597?pvs=21)
+- [20-324 Configuring Multer to adjust Filename & filepath](https://www.notion.so/20-324-Configuring-Multer-to-adjust-Filename-filepath-105a76050dc280a3ac2dc347ba9b8616?pvs=21)
+- [20-325 Filtering Files by Mimetype](https://www.notion.so/20-325-Filtering-Files-by-Mimetype-105a76050dc2807e895ae9c828ec5b4c?pvs=21)
+- [20-326 storing file data in database](https://www.notion.so/20-326-storing-file-data-in-database-105a76050dc28078b121fa70280d5fb4?pvs=21)
+- [20-328 Serving images statically](https://www.notion.so/20-328-Serving-images-statically-4b756b83f1924711815c9373e284c927?pvs=21)
+- [20-329 downloading Files with Auth](https://www.notion.so/20-329-downloading-Files-with-Auth-105a76050dc28015aabfe096b6e864c7?pvs=21)
+- [20-330 Setting File type Headers](https://www.notion.so/20-330-Setting-File-type-Headers-5d52a86879dc4b949a0bc6f4f7239438?pvs=21)
+- [20-331 restricting file access](https://www.notion.so/20-331-restricting-file-access-106a76050dc2802996e8e548d0bd49de?pvs=21)
+- [20-332 streaming Data vs preloading Data](https://www.notion.so/20-332-streaming-Data-vs-preloading-Data-106a76050dc280b6ab54daaa91a0aa13?pvs=21)
+- [20-333 Using Pdfkit for .pdf Generation](https://www.notion.so/20-333-Using-Pdfkit-for-pdf-Generation-106a76050dc28018abeaf5ea4ca8a6e5?pvs=21)
+- [20-334 Generating .pdf file with order data](https://www.notion.so/20-334-Generating-pdf-file-with-order-data-c66808969c9a4c0db574bb42abf2f2a0?pvs=21)
+- [20-335 delete file](https://www.notion.so/20-335-delete-file-105a76050dc280da9466fc6c8182ed31?pvs=21)
+
+---
+
+resource:
+
+- npm multer: https://www.npmjs.com/package/multer
+- Content-Dispositon: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition
+- pdfkit official: https://pdfkit.org/
