@@ -80,7 +80,7 @@ orderRoutes.get("/orders/:oid", isAuthMiddleware, (req, res, next) => {
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader(
       "Content-Disposition",
-      'attachment; filename="' + invoiceName + '"'
+      'inline; filename="' + invoiceName + '"'
     );
     res.send(data);
   });
