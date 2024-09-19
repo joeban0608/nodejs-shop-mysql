@@ -3,18 +3,16 @@ import React from "react";
 import { getOrders } from "../lib/api";
 import useSWR from "swr";
 import Loading from "../components/Loading";
-import useAuth from "../hooks/useAuth";
 import Link from "next/link";
 import { Icon } from "@iconify/react";
 
 const OrderInvoicePage = () => {
-  const { user } = useAuth();
   const {
     data: orders,
     error,
     isLoading,
     // mutate,
-  } = useSWR(user ? ["api/orders", user] : null, getOrders);
+  } = useSWR(["api/orders"], getOrders);
 
   if (isLoading) {
     return (
@@ -30,7 +28,10 @@ const OrderInvoicePage = () => {
   return (
     <div className="p-4">
       {orders.map((order) => (
-        <div key={order.id} className="border rounded-lg p-4 mb-4 shadow-md">
+        <div
+          key={order.id}
+          className="flex justify-between border rounded-lg p-4 mb-4 shadow-md"
+        >
           <h2 className="text-xl font-bold mb-2">Order ID: {order.id}</h2>
           <Link
             href={`http://localhost:8000/orders/${order.id}`}
