@@ -5,6 +5,7 @@ const path = require("path");
 const fs = require("fs");
 const Order = require("../models/order");
 const PDFDocument = require("pdfkit");
+const Product = require("../models/product");
 
 // create order
 orderRoutes.post("/order", isAuthMiddleware, (req, res, next) => {
@@ -74,7 +75,9 @@ orderRoutes.get("/orders/:oid", isAuthMiddleware, (req, res, next) => {
   const oid = req.params.oid;
   const invoiceName = "invoice-" + oid + ".pdf";
   const invoicePath = path.join("invoices", invoiceName);
-  Order.findByPk(oid)
+  Order.findByPk(oid, {
+    include: [{ model: Product }], // 包括关联的 products
+  })
     .then((order) => {
       if (!order) {
         return next(new Error("No order found."));
@@ -89,8 +92,51 @@ orderRoutes.get("/orders/:oid", isAuthMiddleware, (req, res, next) => {
         'inline; filename="' + invoiceName + '"'
       );
       pdfDoc.pipe(fs.createWriteStream(invoicePath));
+      // 文件開始
       pdfDoc.pipe(res);
-      pdfDoc.text("Hello world");
+
+      // 文件內文：
+
+      pdfDoc.fontSize(26).text("Invoice", {
+        lineGap: 6,
+      });
+      pdfDoc.fontSize(16).text(`Order ID: ${oid}`, {
+        lineGap: 6,
+      });
+
+      // 分隔線
+      hr(pdfDoc);
+
+      // 似 <br> 換行
+      br(pdfDoc);
+
+      let totalPrice = 0;
+      order.products.forEach((prod, i) => {
+        const isLast = i === order.products.length - 1;
+        const price = prod.price;
+        const quantitiy = prod.orderItem.quantity;
+        totalPrice += price * quantitiy;
+        const subtotalPrice = price * quantitiy;
+        pdfDoc.fontSize(22).text(prod.title, {
+          lineGap: 3,
+        });
+        pdfDoc.fontSize(12).text(`Price: $${price}`, {});
+        pdfDoc.fontSize(12).text(`Quantity: ${quantitiy}`, { lineGap: 2 });
+        pdfDoc.fontSize(14).text(`Subtotal: $${subtotalPrice}`, {});
+
+        if (!isLast) {
+          pdfDoc.text(" ", {
+            lineGap: 10,
+          });
+        }
+      });
+
+      br(pdfDoc);
+      hr(pdfDoc);
+      br(pdfDoc);
+      pdfDoc.fontSize(20).text("Order Total: $" + totalPrice);
+
+      // 文健結束
       pdfDoc.end();
     })
     .catch((err) => {
@@ -98,5 +144,20 @@ orderRoutes.get("/orders/:oid", isAuthMiddleware, (req, res, next) => {
       next(err);
     });
 });
+
+// 分隔線
+const hr = (pdfDoc) => {
+  pdfDoc
+    .moveTo(50, pdfDoc.y) // 起始点 (x1, y1) - 当前 y 位置
+    .lineTo(550, pdfDoc.y) // 结束点 (x2, y2) - 同一行的右边
+    .stroke();
+};
+
+// 似 <br> 換行
+const br = (pdfDoc) => {
+  pdfDoc.text(" ", {
+    lineGap: 1,
+  });
+};
 
 module.exports = orderRoutes;
