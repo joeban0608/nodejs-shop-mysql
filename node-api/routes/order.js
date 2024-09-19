@@ -3,6 +3,7 @@ const orderRoutes = express.Router();
 const isAuthMiddleware = require("../middleware/isAuth");
 const path = require("path");
 const fs = require("fs");
+const Order = require("../models/order");
 
 // create order
 orderRoutes.post("/order", isAuthMiddleware, (req, res, next) => {
@@ -72,6 +73,19 @@ orderRoutes.get("/orders/:oid", isAuthMiddleware, (req, res, next) => {
   const oid = req.params.oid;
   const invoiceName = "invoice-" + oid + ".pdf";
   const invoicePath = path.join("invoices", invoiceName);
+  Order.findByPk(oid)
+    .then((order) => {
+      if (!order) {
+        return next(new Error("No order found."));
+      }
+      if (order.userId !== req.user.id) {
+        return next(new Error("Unauthorized"));
+      }
+    })
+    .catch((err) => {
+      console.log("get /orders/:oid error", err);
+      next(err);
+    });
   fs.readFile(invoicePath, (err, data) => {
     if (err) {
       console.log("read order err", err);
