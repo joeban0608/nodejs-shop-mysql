@@ -81,23 +81,30 @@ orderRoutes.get("/orders/:oid", isAuthMiddleware, (req, res, next) => {
       if (order.userId !== req.user.id) {
         return next(new Error("Unauthorized"));
       }
+      // fs.readFile(invoicePath, (err, data) => {
+      //   if (err) {
+      //     console.log("read order err", err);
+      //     return next(err);
+      //   }
+      //   res.setHeader("Content-Type", "application/pdf");
+      //   res.setHeader(
+      //     "Content-Disposition",
+      //     'inline; filename="' + invoiceName + '"'
+      //   );
+      //   res.send(data);
+      // });
+      const file = fs.createReadStream(invoicePath);
+      res.setHeader("Content-Type", "application/pdf");
+      res.setHeader(
+        "Content-Disposition",
+        'inline; filename="' + invoiceName + '"'
+      );
+      file.pipe(res);
     })
     .catch((err) => {
       console.log("get /orders/:oid error", err);
       next(err);
     });
-  fs.readFile(invoicePath, (err, data) => {
-    if (err) {
-      console.log("read order err", err);
-      return next(err);
-    }
-    res.setHeader("Content-Type", "application/pdf");
-    res.setHeader(
-      "Content-Disposition",
-      'inline; filename="' + invoiceName + '"'
-    );
-    res.send(data);
-  });
 });
 
 module.exports = orderRoutes;
