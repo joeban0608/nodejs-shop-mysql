@@ -77,6 +77,11 @@ orderRoutes.get("/orders/:oid", isAuthMiddleware, (req, res, next) => {
       console.log("read order err", err);
       return next(err);
     }
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader(
+      "Content-Disposition",
+      'attachment; filename="' + invoiceName + '"'
+    );
     res.send(data);
   });
 });
