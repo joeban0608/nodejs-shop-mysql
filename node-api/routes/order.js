@@ -4,6 +4,7 @@ const isAuthMiddleware = require("../middleware/isAuth");
 const path = require("path");
 const fs = require("fs");
 const Order = require("../models/order");
+const PDFDocument = require("pdfkit");
 
 // create order
 orderRoutes.post("/order", isAuthMiddleware, (req, res, next) => {
@@ -81,25 +82,16 @@ orderRoutes.get("/orders/:oid", isAuthMiddleware, (req, res, next) => {
       if (order.userId !== req.user.id) {
         return next(new Error("Unauthorized"));
       }
-      // fs.readFile(invoicePath, (err, data) => {
-      //   if (err) {
-      //     console.log("read order err", err);
-      //     return next(err);
-      //   }
-      //   res.setHeader("Content-Type", "application/pdf");
-      //   res.setHeader(
-      //     "Content-Disposition",
-      //     'inline; filename="' + invoiceName + '"'
-      //   );
-      //   res.send(data);
-      // });
-      const file = fs.createReadStream(invoicePath);
+      const pdfDoc = new PDFDocument();
       res.setHeader("Content-Type", "application/pdf");
       res.setHeader(
         "Content-Disposition",
         'inline; filename="' + invoiceName + '"'
       );
-      file.pipe(res);
+      pdfDoc.pipe(fs.createWriteStream(invoicePath));
+      pdfDoc.pipe(res);
+      pdfDoc.text("Hello world");
+      pdfDoc.end();
     })
     .catch((err) => {
       console.log("get /orders/:oid error", err);
