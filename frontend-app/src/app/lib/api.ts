@@ -1,5 +1,16 @@
 import { GetCartRes, GetOrderRes, ProductsRes } from "./type";
 
+export const getPrductsRes = async (page: number) => {
+  const res = await fetch(`http://localhost:8000/products?page=${page}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+  });
+  const productsRes = (await res.json()) as ProductsRes;
+  return productsRes;
+};
 export const getPrducts = async () => {
   const res = await fetch("http://localhost:8000/products", {
     method: "GET",
@@ -11,6 +22,7 @@ export const getPrducts = async () => {
   const productsRes = (await res.json()) as ProductsRes;
   return productsRes.data;
 };
+
 export const getAdminPrducts = async () => {
   const res = await fetch("http://localhost:8000/admin/products", {
     method: "GET",

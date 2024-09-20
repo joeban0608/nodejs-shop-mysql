@@ -4,20 +4,14 @@ type PaginationProps = {
   currentPage: number;
   totalPages: number;
   onPageChange: (pageNumber: number) => void;
+  routerUrl: string;
 };
 const Pagination = ({
   currentPage,
   totalPages,
   onPageChange,
+  routerUrl,
 }: PaginationProps) => {
-  const getPageNumbers = () => {
-    const pageNumbers = [];
-    for (let i = 1; i <= totalPages; i++) {
-      pageNumbers.push(i);
-    }
-    return pageNumbers;
-  };
-
   const isPreviewBtnDisabled = currentPage === 1;
   const isNextBtnDisabled = currentPage === totalPages;
 
@@ -36,19 +30,23 @@ const Pagination = ({
           «
         </button>
 
-        {/* Page Numbers */}
-        {getPageNumbers().map((number) => (
-          <Link
-            href={`/shop?page=${number}`}
-            key={number}
-            onClick={() => onPageChange(number)}
-            className={
-              "join-item btn" + `${currentPage === number ? " btn-active" : ""}`
-            }
-          >
-            {number}
-          </Link>
-        ))}
+        {/* 渲染總共有幾頁的 Link */}
+        {Array.from({ length: totalPages }, (_, index) => {
+          const number = index + 1;
+          return (
+            <Link
+              href={`/${routerUrl}?page=${number}`}
+              key={number}
+              onClick={() => onPageChange(number)}
+              className={
+                "join-item btn" +
+                `${currentPage === number ? " btn-active" : ""}`
+              }
+            >
+              {number}
+            </Link>
+          );
+        })}
 
         <button
           className={

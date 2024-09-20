@@ -1,24 +1,25 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import ProductCard from "../components/ProductCard";
 import useSWR from "swr";
-import { getPrducts } from "../lib/api";
+import { getPrducts, getPrductsRes } from "../lib/api";
 import Loading from "../components/Loading";
 import Pagination from "../components/Pagination";
 import { useRouter, useSearchParams } from "next/navigation";
 
 const ShopPage = () => {
-  const {
-    data: products,
-    error,
-    isLoading,
-  } = useSWR("api/products", getPrducts);
   const router = useRouter();
   const searchParams = useSearchParams();
   const [currentPage, setCurrentPage] = useState(
     Number(searchParams.get("page")) ?? 1
   );
-  const totalPages = 10; // 假设有10页
+  const {
+    data: productsRes,
+    error,
+    isLoading,
+  } = useSWR(["api/products", currentPage], () => getPrductsRes(currentPage));
+  const products = productsRes?.data ?? [];
+  const paginationInfo = productsRes?.pagination ?? null;
 
   const handlePageChange = async (pageNumber: number) => {
     await setCurrentPage(pageNumber);
@@ -41,11 +42,16 @@ const ShopPage = () => {
           return <ProductCard key={product.id} {...product} page="shop" />;
         })}
       </section>
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={handlePageChange}
-      />
+      {paginationInfo && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={Math.ceil(
+            paginationInfo.total / paginationInfo.page_size
+          )}
+          onPageChange={handlePageChange}
+          routerUrl="shop"
+        />
+      )}
     </>
   );
 };

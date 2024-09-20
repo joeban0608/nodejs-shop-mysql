@@ -14,8 +14,19 @@ export type ProductInfo = {
   };
 };
 
+/* 
+  current_page: page,
+  page_size: PAGE_SIZE,
+  total: totalItems,
+*/
+export type PaginationApiProps = {
+  current_page: number;
+  page_size: number;
+  total: number;
+};
 export type ProductsRes = {
   data: ProductInfo[];
+  pagination: PaginationApiProps;
 };
 export type ProductInfoRes = {
   data: ProductInfo;
