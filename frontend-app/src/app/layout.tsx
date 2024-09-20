@@ -21,7 +21,9 @@ export default function RootLayout({
     <html lang="en" data-theme="light">
       <body className={`${inter.className} w-dvw h-dvh`}>
         <Header />
-        {children}
+        <main className="w-full h-[calc(100%-56px)] mx-auto px-4 py-8 overflow-auto">
+          {children}
+        </main>
       </body>
     </html>
   );

@@ -3,9 +3,9 @@ import SignUpForm from "./SignUpForm";
 
 const SignUpPage = () => {
   return (
-    <div className="w-full h-[calc(100%-56px)] flex items-center justify-center">
+    <section className="w-full h-full flex justify-center items-center">
       <SignUpForm />
-    </div>
+    </section>
   );
 };
 

@@ -26,7 +26,7 @@ const OrderInvoicePage = () => {
   }
   console.log("orders", orders);
   return (
-    <div className="p-4">
+    <>
       {orders.map((order) => (
         <div
           key={order.id}
@@ -47,7 +47,7 @@ const OrderInvoicePage = () => {
           </Link>
         </div>
       ))}
-    </div>
+    </>
   );
 };
 

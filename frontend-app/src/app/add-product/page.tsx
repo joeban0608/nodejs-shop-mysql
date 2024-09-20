@@ -82,7 +82,7 @@ const AddProductPage = () => {
   }, [validationErrors]);
 
   return (
-    <div className="w-full h-[calc(100%-56px)] flex items-center justify-center">
+    <section className="w-full h-full flex items-center justify-center">
       <form
         encType="multipart/form-data"
         onSubmit={handleSubmit}
@@ -160,7 +160,7 @@ const AddProductPage = () => {
           Submit
         </button>
       </form>
-    </div>
+    </section>
   );
 };
 

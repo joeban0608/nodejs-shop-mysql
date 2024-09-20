@@ -76,7 +76,7 @@ const ShopButtons = ({ id }: { id: string }) => {
     <div className="flex justify-between gap-4 mt-4">
       <Link
         className="flex-1 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 text-center"
-        href={`/product-list/${id}`}
+        href={`/shop/${id}`}
       >
         Detail
       </Link>
