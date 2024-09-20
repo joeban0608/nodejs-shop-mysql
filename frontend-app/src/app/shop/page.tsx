@@ -1,11 +1,11 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard";
 import useSWR from "swr";
 import { getPrducts } from "../lib/api";
 import Loading from "../components/Loading";
 import Pagination from "../components/Pagination";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const ShopPage = () => {
   const {
@@ -14,7 +14,10 @@ const ShopPage = () => {
     isLoading,
   } = useSWR("api/products", getPrducts);
   const router = useRouter();
-  const [currentPage, setCurrentPage] = useState(1);
+  const searchParams = useSearchParams();
+  const [currentPage, setCurrentPage] = useState(
+    Number(searchParams.get("page")) ?? 1
+  );
   const totalPages = 10; // 假设有10页
 
   const handlePageChange = async (pageNumber: number) => {
