@@ -1,6 +1,6 @@
 export default function Home() {
   return (
-    <div className="w-full h-full flex flex-col gap-4">
+    <main className="w-full h-[calc(100%-56px)] flex flex-col gap-4">
       <h1 className="text-4xl font-bold">Home page</h1>
       <p>這是一個練習 nodejs + mySql + sequlize ORM 的專案</p>
       <h2 className="text-xl font-bold">專案架構：</h2>
@@ -26,6 +26,6 @@ export default function Home() {
           </a>
         </li>
       </ul>
-    </div>
+    </main>
   );
 }
