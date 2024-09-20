@@ -82,7 +82,7 @@ export default Header;
 
 const navList = [
   { href: "/", name: "Home", isShowType: "both" },
-  { href: "/shop", name: "Shop", isShowType: "both" },
+  { href: "/shop?page=1", name: "Shop", isShowType: "both" },
   // { href: "/product-list", name: "Products", isShowType: "both" },
   { href: "/cart", name: "Cart", isShowType: "login" },
   { href: "/order", name: "Orders", isShowType: "login" },
