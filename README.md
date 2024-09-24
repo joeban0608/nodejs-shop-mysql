@@ -153,3 +153,14 @@ resource:
 - npm multer: https://www.npmjs.com/package/multer
 - Content-Dispositon: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition
 - pdfkit official: https://pdfkit.org/
+
+# 第二十一章 adding pagination
+- 21-342 [Skip & Limit with SQL](https://www.notion.so/21-342-Skip-Limit-with-SQL-107a76050dc280eabc66c440149dd6b5)
+- [自己實作 pagination api ：](https://www.notion.so/pagination-api-107a76050dc2809a8c43e683a56ec7bd?pvs=21)
+
+---
+
+resource: 
+
+- sql code pageination: https://stackoverflow.com/questions/3799193/mysql-data-best-way-to-implement-paging
+- sequelize pagination: https://sequelize.org/docs/v6/core-concepts/model-querying-basics/#limits-and-pagination
