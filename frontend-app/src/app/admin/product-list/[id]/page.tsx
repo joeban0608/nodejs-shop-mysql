@@ -4,7 +4,7 @@ import React, { FormEvent, useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import useSWR from "swr";
 import Loading from "@/app/components/Loading";
-import { DangerousText } from "@/app/add-product/page";
+import DangerousText from "@/app/components/DangerousText";
 
 const AdminEditProductPage = () => {
   const router = useRouter();

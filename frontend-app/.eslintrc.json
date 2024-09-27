@@ -1,3 +1,7 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": "next/core-web-vitals",
+  "rules": {
+    "react-hooks/exhaustive-deps": "off", // 關閉 React Hook 依賴警告
+    "@next/next/no-img-element": "off" // 關閉 <img> 元素警告
+  }
 }

@@ -2,6 +2,7 @@
 import { useRouter } from "next/navigation";
 import React, { FormEvent, useEffect, useState } from "react";
 import { ValidationErrorInfo } from "../lib/type";
+import DangerousText from "@/app/components/DangerousText";
 
 const AddProductPage = () => {
   const router = useRouter();
@@ -165,7 +166,3 @@ const AddProductPage = () => {
 };
 
 export default AddProductPage;
-
-export const DangerousText = ({ text }: { text: string }) => {
-  return text && <p className="text-sm text-red-600">{text}</p>;
-};

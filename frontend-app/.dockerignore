@@ -1,0 +1,26 @@
+# node_modules and yarn cache
+node_modules
+.yarn
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+
+# 忽略 Next.js 的生成目錄
+.next
+out
+
+# 環境變數文件
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 其他不必要的文件
+.DS_Store
+.git
