@@ -1,7 +1,7 @@
 const express = require("express");
 const User = require("../models/user");
 const authRoutes = express.Router();
-const bcrypt = require("bcrypt");
+const bcrypt = require('bcryptjs');
 const SALT_ROUNDS = 12;
 const { check, validationResult, body } = require("express-validator");
 

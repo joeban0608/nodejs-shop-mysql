@@ -1,0 +1,13 @@
+FROM node:16-alpine
+
+WORKDIR /app
+
+# 使用 --legacy-peer-deps 選項避免可能的依賴問題
+COPY package*.json ./
+RUN npm install --legacy-peer-deps
+
+COPY . .
+
+EXPOSE 8000
+
+CMD ["npm", "run", "start"]
