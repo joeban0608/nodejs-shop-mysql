@@ -1,6 +1,9 @@
 export default function Home() {
   console.log("process.env.DB_HOST in Home", process.env.DB_HOST);
-  console.log("process.env.NEXT_PUBLIC_HOST in Home", process.env.NEXT_PUBLIC_HOST);
+  console.log(
+    "process.env.NEXT_PUBLIC_APP_DB_HOST in Home",
+    process.env.NEXT_PUBLIC_APP_DB_HOST
+  );
   return (
     <>
       <h1 className="text-4xl font-bold">Home page</h1>
