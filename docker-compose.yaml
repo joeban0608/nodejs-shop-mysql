@@ -1,0 +1,47 @@
+version: "3"
+services:
+  frontend:
+    build:
+      context: ./frontend-app
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+    environment:
+      # - NODE_ENV=development
+      - DB_HOST=db
+      - NEXT_PUBLIC_DB_HOST=db
+
+  api:
+    build:
+      context: ./node-api
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      # - NODE_ENV=development
+      - DB_HOST=db # 使用服务名作为主机
+      - DB_PORT=3306 # 使用 MySQL 默认端口
+      - DB_USER=test # 使用您在 db 服务中设置的用户
+      - DB_PASSWORD=test # 使用您在 db 服务中设置的密码
+      - DB_NAME=nodejs-shop # 使用您在 db 服务中创建的数据库
+
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: test
+      MYSQL_DATABASE: nodejs-shop
+      MYSQL_USER: test
+      MYSQL_PASSWORD: test
+
+    ports:
+      - "3306:3306" # 映射主机上的端口
+#     volumes:
+#       - db_data:/var/lib/mysql
+
+# volumes:
+#   db_data:

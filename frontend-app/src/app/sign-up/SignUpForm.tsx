@@ -13,6 +13,9 @@ const SignUpForm = () => {
   // 如果想要用 server redirect 不能使用 useFormState，不然在 server action 的 try catch 會跟 redirect func 打架
   const [state, formAction] = useFormState(signUp, initialState);
   const router = useRouter();
+  
+  console.log("process.env.DB_HOST in SignUpForm", process.env.DB_HOST);
+  console.log("process.env.NEXT_PUBLIC_HOST in SignUpForm", process.env.NEXT_PUBLIC_HOST);
 
   useEffect(() => {
     if (state?.message) {
