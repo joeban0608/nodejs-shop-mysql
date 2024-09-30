@@ -4,6 +4,9 @@ services:
     build:
       context: ./frontend-app
       dockerfile: Dockerfile
+      args:
+        DB_HOST: db
+        NEXT_PUBLIC_APP_DB_HOST: db
     ports:
       - "3000:3000"
     depends_on:
